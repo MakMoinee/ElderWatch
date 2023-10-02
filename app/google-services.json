@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1034148438127",
+    "project_id": "elderwatch-909f1",
+    "storage_bucket": "elderwatch-909f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034148438127:android:1712433ad197e4e64b6d9a",
+        "android_client_info": {
+          "package_name": "com.elderwatch.client"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRdyOcDbAITVsOYv58nOvvzQUWxiCl6sE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
