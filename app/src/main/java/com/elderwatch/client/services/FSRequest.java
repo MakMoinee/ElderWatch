@@ -34,7 +34,7 @@ public class FSRequest extends FirestoreRequest {
                             }
                         }
 
-                        if (users != null) {
+                        if (users != null && !users.getUserID().equals("")) {
                             listener.onSuccess(users);
                         } else {
                             listener.onError(new Error("empty"));

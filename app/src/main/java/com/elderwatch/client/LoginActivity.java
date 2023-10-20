@@ -2,6 +2,7 @@ package com.elderwatch.client;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -28,9 +29,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         request = new FSRequest();
         setListeners();
+        String userID = new UserPref(LoginActivity.this).getUserID();
+        if (!userID.isEmpty()) {
+            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void setListeners() {
+        binding.txtCreateAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+            startActivity(intent);
+        });
         binding.btnLogin.setOnClickListener(v -> {
             String email = binding.editEmail.getText().toString();
             String password = binding.editPassword.getText().toString();
@@ -54,10 +65,22 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public <T> void onSuccess(T any) {
                         if (any instanceof Users) {
-                            new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(users));
-                            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                            startActivity(intent);
-                            finish();
+                            Users mUsers = (Users) any;
+                            if (mUsers != null) {
+                                if (mUsers.getPassword().equals(users.getPassword())) {
+                                    new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(mUsers));
+                                    Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     }
 

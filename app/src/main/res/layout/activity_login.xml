@@ -87,6 +87,17 @@
                     android:text="Login"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:id="@+id/txtCreateAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnLogin"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Create Account"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>

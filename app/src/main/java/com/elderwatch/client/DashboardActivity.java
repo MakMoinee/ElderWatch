@@ -1,9 +1,11 @@
 package com.elderwatch.client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.elderwatch.client.interfaces.LogoutListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -16,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.elderwatch.client.databinding.ActivityDashboardBinding;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements LogoutListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityDashboardBinding binding;
@@ -41,7 +43,7 @@ public class DashboardActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
@@ -61,5 +63,12 @@ public class DashboardActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void logoutCallFinish() {
+        Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
