@@ -12,6 +12,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="CustomThemeBG" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/bg</item>
+        <item name="colorSecondary">@color/medium_bg</item>
+        <item name="colorAccent">@color/dark_bg</item>
+    </style>
+
     <style name="Theme.ElderWatch.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ElderWatch.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

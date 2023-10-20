@@ -2,6 +2,7 @@ package com.elderwatch.client;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -76,6 +77,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                     FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                             .setParams(MapForm.convertObjectToMap(users))
                             .setCollectionName(FirestoreRequest.USERS_COLLECTION)
+                            .setEmail(email)
+                            .setWhereFromField(FirestoreRequest.EMAIL_STRING)
+                            .setWhereValueField(email)
                             .build();
 
                     request.insertUniqueData(body, new FirestoreListener() {
@@ -89,6 +93,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                         @Override
                         public void onError(Error error) {
                             pdLoading.dismiss();
+                            if (error != null) {
+                                Log.e("error", error.getLocalizedMessage());
+                            }
                             Toast.makeText(CreateAccountActivity.this, "Failed To Create Account, Please Try Again Later", Toast.LENGTH_SHORT).show();
                         }
                     });

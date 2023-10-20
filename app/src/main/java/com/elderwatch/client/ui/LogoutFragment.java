@@ -35,6 +35,7 @@ public class LogoutFragment extends Fragment {
                 }
                 default -> {
                     dialog.dismiss();
+                    listener.logoutNegativeButton();
                 }
             }
         };

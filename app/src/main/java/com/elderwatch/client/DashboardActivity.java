@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.elderwatch.client.interfaces.LogoutListener;
+import com.elderwatch.client.models.Users;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -17,11 +19,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.elderwatch.client.databinding.ActivityDashboardBinding;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class DashboardActivity extends AppCompatActivity implements LogoutListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityDashboardBinding binding;
+
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,9 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
         binding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        String rawUser = getIntent().getStringExtra("user");
+        Users users = new Gson().fromJson(rawUser, new TypeToken<Users>() {
+        }.getType());
         setSupportActionBar(binding.appBarDashboard.toolbar);
         binding.appBarDashboard.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,13 +48,20 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+        if (users != null) {
+            View navView = binding.navView.getHeaderView(0);
+            TextView txtEmail = navView.findViewById(R.id.txtEmail);
+            txtEmail.setText(users.getEmail());
+        }
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
@@ -70,5 +85,10 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void logoutNegativeButton() {
+        navController.navigate(R.id.nav_home);
     }
 }

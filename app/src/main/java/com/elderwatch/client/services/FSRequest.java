@@ -4,7 +4,9 @@ import com.elderwatch.client.models.Users;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.github.MakMoinee.library.services.FirestoreRequest;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class FSRequest extends FirestoreRequest {
@@ -49,4 +51,6 @@ public class FSRequest extends FirestoreRequest {
             }
         });
     }
+
+
 }

@@ -16,6 +16,7 @@ import com.github.MakMoinee.library.common.MapForm;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.github.MakMoinee.library.services.FirestoreRequest;
+import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -71,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                                     new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(mUsers));
                                     Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                                    intent.putExtra("user", new Gson().toJson(mUsers));
                                     startActivity(intent);
                                     finish();
                                 } else {
