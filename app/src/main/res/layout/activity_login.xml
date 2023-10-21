@@ -141,6 +141,17 @@
                 android:fontFamily="@font/roboto_regular"
                 android:text="version 1.0.0"
                 android:textColor="@android:color/white" />
+
+            <ImageButton
+                android:id="@+id/scanParentQR"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@+id/txtVersion"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_scan_qr" />
         </RelativeLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
