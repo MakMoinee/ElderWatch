@@ -17,6 +17,9 @@ import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.github.MakMoinee.library.services.FirestoreRequest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CreateAccountActivity extends AppCompatActivity {
 
     ActivityCreateAccountBinding binding;
@@ -62,6 +65,8 @@ public class CreateAccountActivity extends AppCompatActivity {
             } else {
                 if (confirmPassword.equals(password)) {
                     pdLoading.show();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String currentDate = sdf.format(new Date());
                     Users users = new Users.UserBuilder()
                             .setEmail(email)
                             .setFirstName(firstName)
@@ -72,6 +77,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             .setPhoneNumber(phoneNumber)
                             .setPassword(password)
                             .setUserType(2)
+                            .setRegisteredDate(currentDate)
                             .build();
 
                     FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()

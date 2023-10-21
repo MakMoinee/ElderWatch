@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.elderwatch.client.interfaces.LogoutListener;
 import com.elderwatch.client.models.Users;
+import com.elderwatch.client.preference.UserPref;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -39,26 +40,32 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         Users users = new Gson().fromJson(rawUser, new TypeToken<Users>() {
         }.getType());
         setSupportActionBar(binding.appBarDashboard.toolbar);
-        binding.appBarDashboard.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+        View navView = binding.navView.getHeaderView(0);
+        TextView txtEmail = navView.findViewById(R.id.txtEmail);
+        TextView txtName = navView.findViewById(R.id.txtName);
         if (users != null) {
-            View navView = binding.navView.getHeaderView(0);
-            TextView txtEmail = navView.findViewById(R.id.txtEmail);
             txtEmail.setText(users.getEmail());
+            txtName.setText(String.format("%s, %s %s", users.getLastName(), users.getFirstName(), users.getMiddleName()));
+        } else {
+            String email = new UserPref(DashboardActivity.this).getEmail();
+            String name = new UserPref(DashboardActivity.this).getFullName();
+            if (!email.isEmpty()) {
+                txtEmail.setText(email);
+            }
+
+            if (!name.isEmpty()) {
+                txtName.setText(name);
+            }
         }
 
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_logout)
+                R.id.nav_home, R.id.nav_activities, R.id.nav_gallery, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
@@ -66,12 +73,6 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.dashboard, menu);
-        return true;
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

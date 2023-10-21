@@ -36,6 +36,10 @@
             android:name=".CreateAccountActivity"
             android:parentActivityName=".LoginActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".GoogleLoginActivity"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

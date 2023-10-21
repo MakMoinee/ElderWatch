@@ -23,4 +23,37 @@ public class UserPref extends LoginPref {
 
         return userID;
     }
+
+    public String getEmail() {
+        String email = "";
+
+        for (Map.Entry<String, Object> obj : this.getLogin().entrySet()) {
+            if (obj.getKey().equals("email")) {
+                email = obj.getValue().toString();
+                break;
+            }
+        }
+
+        return email;
+    }
+
+    public String getFullName() {
+        String firstName = "";
+        String middleName = "";
+        String lastName = "";
+
+        for (Map.Entry<String, Object> obj : this.getLogin().entrySet()) {
+            if (obj.getKey().equals("firstName")) {
+                firstName = obj.getValue().toString();
+            }
+            if (obj.getKey().equals("middleName")) {
+                middleName = obj.getValue().toString();
+            }
+            if (obj.getKey().equals("lastName")) {
+                lastName = obj.getValue().toString();
+            }
+        }
+
+        return String.format("%s, %s %s", lastName, firstName, middleName);
+    }
 }

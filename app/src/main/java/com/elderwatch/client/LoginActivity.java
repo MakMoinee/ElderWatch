@@ -1,6 +1,8 @@
 package com.elderwatch.client;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -36,6 +38,14 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        try {
+            String versionName = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+            binding.txtVersion.setText(String.format("Version %s", versionName));
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
     }
 
     private void setListeners() {
@@ -93,5 +103,21 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
+        binding.btnGoogle.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, GoogleLoginActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String userID = new UserPref(LoginActivity.this).getUserID();
+        if (!userID.isEmpty()) {
+            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

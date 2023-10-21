@@ -4,102 +4,143 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg">
+        android:background="@color/bg"
+        android:scrollbars="vertical">
 
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="15dp">
+            android:layout_height="match_parent">
 
-            <RelativeLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="15dp">
 
-                <ImageView
-                    android:id="@+id/imgLogo"
-                    android:layout_width="150dp"
-                    android:layout_height="100dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/elder" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutEmail"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/imgLogo"
-                    android:layout_marginTop="20dp"
-                    android:hint="Email"
-                    android:textColorHint="@android:color/black">
+                    android:padding="16dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editEmail"
+                    <ImageView
+                        android:id="@+id/imgLogo"
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/elder" />
+
+                    <TextView
+                        android:id="@+id/lblElderWatch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imgLogo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Elder Watch"
+                        android:textColor="@android:color/black"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:minLines="1"
+                        android:layout_below="@+id/lblElderWatch"
+                        android:layout_marginTop="20dp"
+                        android:hint="Email"
+                        android:textColorHint="@android:color/black">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:minLines="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="15sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/layoutEmail"
+                        android:layout_marginTop="10dp"
+                        android:hint="Password"
+                        android:textColorHint="@android:color/black"
+                        app:passwordToggleEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editPassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:minLines="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="15sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <Button
+                        android:id="@+id/btnLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/layoutPassword"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Login"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtCreateAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/btnLogin"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="Create Account"
                         android:textColor="@android:color/black"
                         android:textSize="15sp" />
 
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/layoutEmail"
-                    android:layout_marginTop="10dp"
-                    android:hint="Password"
-                    android:textColorHint="@android:color/black"
-                    app:passwordToggleEnabled="true">
+                    <ImageButton
+                        android:id="@+id/btnGoogle"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:layout_below="@+id/txtCreateAccount"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/google" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:minLines="1"
-                        android:textColor="@android:color/black"
-                        android:textSize="15sp" />
+                </RelativeLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.cardview.widget.CardView>
 
-
-                <Button
-                    android:id="@+id/btnLogin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/layoutPassword"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="Login"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/txtCreateAccount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/btnLogin"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:text="Create Account"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp" />
-
-            </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/txtVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cardMain"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/roboto_regular"
+                android:text="version 1.0.0"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+    </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
