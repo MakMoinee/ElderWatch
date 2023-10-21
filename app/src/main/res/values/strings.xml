@@ -12,4 +12,5 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="web_client_id">1034148438127-f6cbuujqda89qiml3lhiok9ptv5alg4o.apps.googleusercontent.com</string>
+    <string name="title_activity_parent_dashboard">ParentDashboardActivity</string>
 </resources>
