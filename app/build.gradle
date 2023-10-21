@@ -53,7 +53,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-auth'
 
-    implementation 'com.github.MakMoinee:library:1.0.23'
+    implementation 'com.github.MakMoinee:library:1.0.25'
     implementation 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testImplementation 'org.projectlombok:lombok:1.18.28'
@@ -61,6 +61,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
     implementation 'org.apache.httpcomponents:httpmime:4.5.13'
     implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.zxing:core:3.3.2'
+    implementation 'com.google.zxing:javase:3.3.2'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
 
