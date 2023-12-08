@@ -45,6 +45,11 @@
             android:name=".GoogleLoginActivity"
             android:parentActivityName=".LoginActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddDevicesActivity"
+            android:parentActivityName=".DashboardActivity"
+            android:theme="@style/CustomThemeBG"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
