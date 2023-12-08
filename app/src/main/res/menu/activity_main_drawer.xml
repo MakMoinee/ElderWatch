@@ -11,15 +11,21 @@
         <item
             android:id="@+id/nav_generate_qr"
             android:icon="@drawable/ic_qr"
-            android:title="Generate QR"/>
+            android:title="Generate QR" />
         <item
             android:id="@+id/nav_activities"
             android:icon="@drawable/ic_activities"
-            android:title="Activity"/>
+            android:title="Activity" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_gallery" />
+
+        <item
+            android:id="@+id/nav_devices"
+            android:icon="@drawable/ic_devices"
+            android:title="Devices" />
+
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
