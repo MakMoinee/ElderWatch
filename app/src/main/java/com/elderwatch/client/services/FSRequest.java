@@ -11,6 +11,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class FSRequest extends FirestoreRequest {
 
+    public static final String DEVICES_COLLECTION = "devices";
+
     public FSRequest() {
         super();
     }
