@@ -1,6 +1,8 @@
 package com.elderwatch.client;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,18 +12,23 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.elderwatch.client.databinding.ActivityLoginBinding;
+import com.elderwatch.client.databinding.DialogParentLoginBinding;
 import com.elderwatch.client.models.Users;
+import com.elderwatch.client.otherActivity.parents.ParentDashboardActivity;
 import com.elderwatch.client.preference.UserPref;
 import com.elderwatch.client.services.FSRequest;
 import com.github.MakMoinee.library.common.MapForm;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.github.MakMoinee.library.services.FirestoreRequest;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -30,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
     FSRequest request;
+    ProgressDialog pDialog;
+    DialogParentLoginBinding parentLoginBinding;
+    AlertDialog alertDialog;
 
     private ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(), result -> {
         if (result.getContents() == null) {
@@ -42,7 +52,105 @@ public class LoginActivity extends AppCompatActivity {
     });
 
     private void handleScannedOutput(String contents) {
-        Toast.makeText(LoginActivity.this, contents, Toast.LENGTH_SHORT).show();
+        String[] arr = contents.split(":");
+        if (arr.length > 0) {
+            pDialog.show();
+            String userID = arr[1];
+            FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                    .setCollectionName(FSRequest.USERS_COLLECTION)
+                    .setDocumentID(userID)
+                    .build();
+
+            request.findAll(body, new FirestoreListener() {
+                @Override
+                public <T> void onSuccess(T any) {
+                    pDialog.dismiss();
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(LoginActivity.this);
+                    DialogInterface.OnClickListener dListener = (dialog, which) -> {
+                        switch (which) {
+                            case DialogInterface.BUTTON_NEGATIVE -> {
+                                dialog.dismiss();
+                                Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+                                intent.putExtra("isParent", true);
+                                startActivity(intent);
+                            }
+                            case DialogInterface.BUTTON_POSITIVE -> {
+                                dialog.dismiss();
+                                AlertDialog.Builder pBuilder = new AlertDialog.Builder(LoginActivity.this);
+                                parentLoginBinding = DialogParentLoginBinding.inflate(getLayoutInflater(), null, false);
+                                pBuilder.setView(parentLoginBinding.getRoot());
+                                setParentListeners();
+                                alertDialog = pBuilder.create();
+                                alertDialog.show();
+                            }
+                            case DialogInterface.BUTTON_NEUTRAL -> {
+                                dialog.dismiss();
+                            }
+                        }
+                    };
+                    mBuilder.setMessage("Please Choose Option To Proceed")
+                            .setNegativeButton("Create Account", dListener)
+                            .setPositiveButton("Login", dListener)
+                            .setNeutralButton("Cancel", dListener)
+                            .setCancelable(false)
+                            .show();
+                }
+
+                @Override
+                public void onError(Error error) {
+                    pDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Failed To Load Scanned QR", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void setParentListeners() {
+        parentLoginBinding.btnLoginParent.setOnClickListener(v -> {
+            String username = parentLoginBinding.editUsername.getText().toString().trim();
+            String password = parentLoginBinding.editUsername.getText().toString().trim();
+
+            if (username.equals("") || password.equals("")) {
+                Toast.makeText(LoginActivity.this, "Please Don't Leave Empty Fields", Toast.LENGTH_SHORT).show();
+            } else {
+                FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                        .setCollectionName(FSRequest.USERS_COLLECTION)
+                        .setEmail(username)
+                        .setWhereFromField("email")
+                        .setWhereValueField(username)
+                        .build();
+
+                request.login(body, new FirestoreListener() {
+                    @Override
+                    public <T> void onSuccess(T any) {
+                        if (any instanceof Users) {
+                            Users users = (Users) any;
+                            if (users != null) {
+                                switch (users.getUserType()) {
+                                    case 3 -> {
+                                        new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(users));
+                                        Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(LoginActivity.this, ParentDashboardActivity.class));
+                                        finish();
+                                    }
+                                    default -> {
+                                        Toast.makeText(LoginActivity.this, "The user you login is not a parent", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Error error) {
+                        if (error != null) {
+                            Log.e("parent_login_err", error.getLocalizedMessage());
+                        }
+                        Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -50,6 +158,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        pDialog = new ProgressDialog(LoginActivity.this);
+        pDialog.setMessage("Loading ...");
+        pDialog.setCancelable(false);
         request = new FSRequest();
         setListeners();
         if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.CAMERA)
