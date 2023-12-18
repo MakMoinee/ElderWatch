@@ -27,12 +27,17 @@ public class CreateAccountActivity extends AppCompatActivity {
     FSRequest request;
 
     ProgressDialog pdLoading;
+    boolean isGuardian = false;
+
+    String caregiverID = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCreateAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        isGuardian = getIntent().getBooleanExtra("isParent", false);
+        caregiverID = getIntent().getStringExtra("caregiverID");
         request = new FSRequest();
         pdLoading = new ProgressDialog(CreateAccountActivity.this);
         pdLoading.setMessage("Sending Request ...");
@@ -67,6 +72,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                     pdLoading.show();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String currentDate = sdf.format(new Date());
+                    int userType = getUserType();
                     Users users = new Users.UserBuilder()
                             .setEmail(email)
                             .setFirstName(firstName)
@@ -76,7 +82,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             .setBirthDate(birthDate)
                             .setPhoneNumber(phoneNumber)
                             .setPassword(password)
-                            .setUserType(2)
+                            .setUserType(userType)
                             .setRegisteredDate(currentDate)
                             .build();
 
@@ -111,5 +117,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private int getUserType() {
+        int userType = 2;
+        if (isGuardian) {
+            userType = 3;
+        }
+        return userType;
     }
 }

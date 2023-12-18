@@ -41,6 +41,8 @@ public class LoginActivity extends AppCompatActivity {
     DialogParentLoginBinding parentLoginBinding;
     AlertDialog alertDialog;
 
+    String userID = "";
+
     private ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(), result -> {
         if (result.getContents() == null) {
             Toast.makeText(LoginActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         String[] arr = contents.split(":");
         if (arr.length > 0) {
             pDialog.show();
-            String userID = arr[1];
+            userID = arr[1];
             FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                     .setCollectionName(FSRequest.USERS_COLLECTION)
                     .setDocumentID(userID)
@@ -130,11 +132,13 @@ public class LoginActivity extends AppCompatActivity {
                                     case 3 -> {
                                         new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(users));
                                         Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(LoginActivity.this, ParentDashboardActivity.class));
+                                        Intent intent = new Intent(LoginActivity.this, ParentDashboardActivity.class);
+                                        intent.putExtra("caregiverID", userID);
+                                        startActivity(intent);
                                         finish();
                                     }
                                     default -> {
-                                        Toast.makeText(LoginActivity.this, "The user you login is not a parent", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, "The user you login is not a guardian", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -162,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
         pDialog.setMessage("Loading ...");
         pDialog.setCancelable(false);
         request = new FSRequest();
+        userID = "";
         setListeners();
         if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
