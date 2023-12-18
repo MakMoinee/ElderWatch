@@ -129,19 +129,25 @@ public class LoginActivity extends AppCompatActivity {
                         if (any instanceof Users) {
                             Users users = (Users) any;
                             if (users != null) {
-                                switch (users.getUserType()) {
-                                    case 3 -> {
-                                        new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(users));
-                                        Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(LoginActivity.this, ParentDashboardActivity.class);
-                                        intent.putExtra("caregiverID", userID);
-                                        startActivity(intent);
-                                        finish();
+                                boolean isValidUser = new HashPass().verifyPassword(password, users.getPassword());
+                                if (isValidUser) {
+                                    switch (users.getUserType()) {
+                                        case 3 -> {
+                                            new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(users));
+                                            Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(LoginActivity.this, ParentDashboardActivity.class);
+                                            intent.putExtra("caregiverID", userID);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        default -> {
+                                            Toast.makeText(LoginActivity.this, "The user you login is not a guardian", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                    default -> {
-                                        Toast.makeText(LoginActivity.this, "The user you login is not a guardian", Toast.LENGTH_SHORT).show();
-                                    }
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_SHORT).show();
                                 }
+
                             }
                         }
                     }
