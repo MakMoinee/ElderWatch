@@ -27,6 +27,7 @@ import com.github.MakMoinee.library.common.MapForm;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.github.MakMoinee.library.services.FirestoreRequest;
+import com.github.MakMoinee.library.services.HashPass;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
@@ -218,7 +219,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (any instanceof Users) {
                             Users mUsers = (Users) any;
                             if (mUsers != null) {
-                                if (mUsers.getPassword().equals(users.getPassword())) {
+                                boolean isEqualPassword = new HashPass().verifyPassword(users.getPassword(), mUsers.getPassword());
+                                if (isEqualPassword) {
                                     new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(mUsers));
                                     Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);

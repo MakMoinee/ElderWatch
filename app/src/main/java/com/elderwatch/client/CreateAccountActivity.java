@@ -16,6 +16,7 @@ import com.github.MakMoinee.library.common.MapForm;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.github.MakMoinee.library.services.FirestoreRequest;
+import com.github.MakMoinee.library.services.HashPass;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,7 +82,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             .setAddress(address)
                             .setBirthDate(birthDate)
                             .setPhoneNumber(phoneNumber)
-                            .setPassword(password)
+                            .setPassword(new HashPass().makeHashPassword(password))
                             .setUserType(userType)
                             .setRegisteredDate(currentDate)
                             .build();

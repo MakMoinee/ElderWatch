@@ -53,7 +53,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-auth'
 
-    implementation 'com.github.MakMoinee:library:1.0.25'
+    implementation 'com.github.MakMoinee:library:1.0.39'
     implementation 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testImplementation 'org.projectlombok:lombok:1.18.28'
