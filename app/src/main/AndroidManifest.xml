@@ -2,8 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -51,8 +56,16 @@
         <activity
             android:name=".AddDevicesActivity"
             android:parentActivityName=".DashboardActivity"
-            android:theme="@style/CustomThemeBG"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomThemeBG" />
+
+        <receiver
+            android:name=".services.NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.TRIGGER_NOTIF" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
