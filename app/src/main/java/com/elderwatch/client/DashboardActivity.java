@@ -1,14 +1,19 @@
 package com.elderwatch.client;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.elderwatch.client.interfaces.LogoutListener;
 import com.elderwatch.client.models.Users;
 import com.elderwatch.client.preference.UserPref;
+import com.elderwatch.client.services.FSRequest;
+import com.github.MakMoinee.library.interfaces.FirestoreListener;
+import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -20,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.elderwatch.client.databinding.ActivityDashboardBinding;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -30,15 +36,20 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
     private NavController navController;
 
+    ProgressDialog pDialog;
+    FSRequest request;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        String rawUser = getIntent().getStringExtra("user");
-        Users users = new Gson().fromJson(rawUser, new TypeToken<Users>() {
-        }.getType());
+        request = new FSRequest();
+        pDialog = new ProgressDialog(DashboardActivity.this);
+        pDialog.setMessage("Loading ...");
+        pDialog.setCancelable(false);
+        Users users = new UserPref(DashboardActivity.this).getUsers();
         setSupportActionBar(binding.appBarDashboard.toolbar);
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -71,6 +82,39 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        loadPatients();
+    }
+
+    private void loadPatients() {
+        pDialog.show();
+        FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                .setCollectionName(FSRequest.PATIENTS_COLLECTION)
+                .build();
+        request.findAll(body, new FirestoreListener() {
+            @Override
+            public <T> void onSuccess(T any) {
+                pDialog.dismiss();
+                if (any instanceof QuerySnapshot) {
+                    QuerySnapshot snapshots = (QuerySnapshot) any;
+                    if (snapshots.isEmpty()) {
+                        Toast.makeText(DashboardActivity.this, "There's no patient added yet, please add", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(DashboardActivity.this, ActivityAddPatient.class);
+                        startActivity(intent);
+                    } else {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Error error) {
+                pDialog.dismiss();
+                Toast.makeText(DashboardActivity.this, "There's no patient added yet, please add", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(DashboardActivity.this, ActivityAddPatient.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -91,5 +135,12 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
     @Override
     public void logoutNegativeButton() {
         navController.navigate(R.id.nav_home);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        pDialog.show();
+        loadPatients();
     }
 }
