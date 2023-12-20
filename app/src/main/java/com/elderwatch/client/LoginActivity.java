@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     AlertDialog alertDialog;
 
     String userID = "";
+    HashPass hashPass = new HashPass();
 
     private ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(), result -> {
         if (result.getContents() == null) {
@@ -111,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setParentListeners() {
         parentLoginBinding.btnLoginParent.setOnClickListener(v -> {
             String username = parentLoginBinding.editUsername.getText().toString().trim();
-            String password = parentLoginBinding.editUsername.getText().toString().trim();
+            String password = parentLoginBinding.editPassword.getText().toString().trim();
 
             if (username.equals("") || password.equals("")) {
                 Toast.makeText(LoginActivity.this, "Please Don't Leave Empty Fields", Toast.LENGTH_SHORT).show();
@@ -129,7 +130,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (any instanceof Users) {
                             Users users = (Users) any;
                             if (users != null) {
-                                boolean isValidUser = new HashPass().verifyPassword(password, users.getPassword());
+                                boolean isValidUser = hashPass.verifyPassword(password, users.getPassword());
+                                Log.e("user isValidUser", String.valueOf(isValidUser));
                                 if (isValidUser) {
                                     switch (users.getUserType()) {
                                         case 3 -> {
@@ -181,9 +183,22 @@ public class LoginActivity extends AppCompatActivity {
         }
         String userID = new UserPref(LoginActivity.this).getUserID();
         if (!userID.isEmpty()) {
-            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-            startActivity(intent);
-            finish();
+            int userType = new UserPref(LoginActivity.this).getIntItem("userType");
+            if (userType != 0) {
+                switch (userType) {
+                    case 2 -> {
+                        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    case 3 -> {
+                        Intent intent = new Intent(LoginActivity.this, ParentDashboardActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+
         }
 
         try {
@@ -225,14 +240,24 @@ public class LoginActivity extends AppCompatActivity {
                         if (any instanceof Users) {
                             Users mUsers = (Users) any;
                             if (mUsers != null) {
-                                boolean isEqualPassword = new HashPass().verifyPassword(users.getPassword(), mUsers.getPassword());
+                                boolean isEqualPassword = hashPass.verifyPassword(users.getPassword(), mUsers.getPassword());
                                 if (isEqualPassword) {
                                     new UserPref(LoginActivity.this).storeLogin(MapForm.convertObjectToMap(mUsers));
                                     Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                                    intent.putExtra("user", new Gson().toJson(mUsers));
-                                    startActivity(intent);
-                                    finish();
+
+                                    switch (mUsers.getUserType()) {
+                                        case 2 -> {
+                                            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        case 3 -> {
+                                            Intent intent = new Intent(LoginActivity.this, ParentDashboardActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }
+
                                 } else {
                                     Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_SHORT).show();
                                 }

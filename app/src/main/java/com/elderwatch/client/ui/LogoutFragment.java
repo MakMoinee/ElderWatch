@@ -22,6 +22,7 @@ public class LogoutFragment extends Fragment {
     FragmentHomeBinding binding;
     LogoutListener listener;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -26,7 +26,7 @@
             android:layout_below="@+id/lblParentLogin"
             android:layout_marginTop="10dp"
             android:background="@android:color/white"
-            android:hint="Username"
+            android:hint="Email"
             android:textColorHint="@android:color/black">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:lines="1"
                 android:maxLines="1"
                 android:minLines="1"
