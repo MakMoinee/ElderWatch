@@ -13,6 +13,7 @@ public class FSRequest extends FirestoreRequest {
 
     public static final String DEVICES_COLLECTION = "devices";
     public static final String PATIENTS_COLLECTION = "patients";
+    public static final String ACTIVITY_COLLECTION = "activity";
 
     public FSRequest() {
         super();

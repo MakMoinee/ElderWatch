@@ -8,11 +8,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.elderwatch.client.databinding.ActivityAddPatientBinding;
+import com.elderwatch.client.models.CaregiverActivity;
 import com.elderwatch.client.models.Patients;
+import com.elderwatch.client.preference.UserPref;
 import com.elderwatch.client.services.FSRequest;
 import com.github.MakMoinee.library.common.MapForm;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ActivityAddPatient extends AppCompatActivity {
 
@@ -61,7 +67,53 @@ public class ActivityAddPatient extends AppCompatActivity {
                 request.insertUniqueData(body, new FirestoreListener() {
                     @Override
                     public <T> void onSuccess(T any) {
+                        if (any instanceof String) {
+                            String id = (String) any;
+                            if (id != null && id != "") {
+                                String userID = new UserPref(ActivityAddPatient.this).getUserID();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
+                                String currentDate = sdf.format(new Date());
+                                String currentTime = sdf2.format(new Date());
+                                CaregiverActivity activity = new CaregiverActivity.CaregiverActivityBuilder()
+                                        .setPatientID(id)
+                                        .setCaregiverID(userID)
+                                        .setTime(currentTime)
+                                        .setDate(currentDate)
+                                        .build();
+                                FirestoreRequestBody b = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                                        .setCollectionName(FSRequest.ACTIVITY_COLLECTION)
+                                        .setParams(MapForm.convertObjectToMap(activity))
+                                        .build();
+                                request.insertUniqueData(b, new FirestoreListener() {
+                                    @Override
+                                    public <T> void onSuccess(T any) {
+                                        Toast.makeText(ActivityAddPatient.this, "Successfully Added Patient", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
 
+                                    @Override
+                                    public void onError(Error error) {
+                                        FirestoreRequestBody b2 = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                                                .setCollectionName(FSRequest.PATIENTS_COLLECTION)
+                                                .setDocumentID(id)
+                                                .build();
+                                        request.delete(b2, new FirestoreListener() {
+                                            @Override
+                                            public <T> void onSuccess(T any) {
+
+                                            }
+
+                                            @Override
+                                            public void onError(Error error) {
+
+                                            }
+                                        });
+                                        Toast.makeText(ActivityAddPatient.this, "Failed To Add Patient, Please Try Again Later", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
                     }
 
                     @Override

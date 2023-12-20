@@ -89,7 +89,7 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
     private void loadPatients() {
         pDialog.show();
         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
-                .setCollectionName(FSRequest.PATIENTS_COLLECTION)
+                .setCollectionName(FSRequest.ACTIVITY_COLLECTION)
                 .build();
         request.findAll(body, new FirestoreListener() {
             @Override
