@@ -2,6 +2,7 @@ package com.elderwatch.client.preference;
 
 import android.content.Context;
 
+import com.elderwatch.client.models.Users;
 import com.github.MakMoinee.library.preference.LoginPref;
 
 import java.util.Map;
@@ -55,5 +56,49 @@ public class UserPref extends LoginPref {
         }
 
         return String.format("%s, %s %s", lastName, firstName, middleName);
+    }
+
+    public Users getUsers() {
+        Users users = new Users();
+
+        for (Map.Entry<String, Object> obj : this.getLogin().entrySet()) {
+            switch (obj.getKey()) {
+                case "userID" -> {
+                    users.setUserID((String) obj.getValue());
+                }
+                case "firstName" -> {
+                    users.setFirstName((String) obj.getValue());
+                }
+                case "middleName" -> {
+                    users.setMiddleName((String) obj.getValue());
+                }
+                case "lastName" -> {
+                    users.setLastName((String) obj.getValue());
+                }
+                case "email" -> {
+                    users.setEmail((String) obj.getValue());
+                }
+                case "password" -> {
+                    users.setPassword((String) obj.getValue());
+                }
+                case "address" -> {
+                    users.setAddress((String) obj.getValue());
+                }
+                case "birthDate" -> {
+                    users.setBirthDate((String) obj.getValue());
+                }
+                case "phoneNumber" -> {
+                    users.setPhoneNumber((String) obj.getValue());
+                }
+                case "userType" -> {
+                    users.setUserType((int) obj.getValue());
+                }
+                case "registeredDate" -> {
+                    users.setRegisteredDate((String) obj.getValue());
+                }
+            }
+        }
+
+        return users;
     }
 }
