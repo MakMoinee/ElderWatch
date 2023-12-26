@@ -1,6 +1,7 @@
 package com.elderwatch.client;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -9,22 +10,31 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.elderwatch.client.databinding.ActivityAddPatientBinding;
 import com.elderwatch.client.models.CaregiverActivity;
+import com.elderwatch.client.models.Devices;
 import com.elderwatch.client.models.Patients;
 import com.elderwatch.client.preference.UserPref;
 import com.elderwatch.client.services.FSRequest;
 import com.github.MakMoinee.library.common.MapForm;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class ActivityAddPatient extends AppCompatActivity {
 
     ActivityAddPatientBinding binding;
 
     FSRequest request;
+
+    List<Devices> devicesList = new ArrayList<>();
+
+    String userID = "";
 
 
     @Override
@@ -33,8 +43,52 @@ public class ActivityAddPatient extends AppCompatActivity {
         binding = ActivityAddPatientBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         request = new FSRequest();
+        userID = new UserPref(ActivityAddPatient.this).getUserID();
         setTitle("Add Patient");
+        getAllActiveDevices();
         setListeners();
+    }
+
+    private void getAllActiveDevices() {
+        devicesList = new ArrayList<>();
+        FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                .setCollectionName(FSRequest.DEVICES_COLLECTION)
+                .setWhereFromField("userID")
+                .setWhereValueField(userID)
+                .build();
+
+        request.findAll(body, new FirestoreListener() {
+            @Override
+            public <T> void onSuccess(T any) {
+                if (any instanceof QuerySnapshot snapshots) {
+                    if (!snapshots.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshots) {
+                            if (documentSnapshot.exists()) {
+                                Devices devices = documentSnapshot.toObject(Devices.class);
+                                if (devices != null) {
+                                    devices.setDeviceID(documentSnapshot.getId());
+                                    devicesList.add(devices);
+                                }
+                            }
+                        }
+                    }
+
+                    if (devicesList.size() == 0) {
+                        Toast.makeText(ActivityAddPatient.this, "There are no devices added yet, please add device before adding patient", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Error error) {
+                if (error != null && error.getLocalizedMessage() != null) {
+                    Log.e("error_devices", error.getLocalizedMessage());
+                }
+                Toast.makeText(ActivityAddPatient.this, "There are no devices added yet, please add device before adding patient", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     private void setListeners() {

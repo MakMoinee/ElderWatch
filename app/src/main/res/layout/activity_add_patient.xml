@@ -158,6 +158,27 @@
                                 android:textColor="@color/black"
                                 android:textSize="15sp" />
                         </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <TextView
+                            android:id="@+id/lblDevice"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="20sp"
+                            android:text="CCTV Device"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@+id/layoutBirthDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <Spinner
+                            android:layout_marginBottom="10dp"
+                            android:id="@+id/spinner"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@+id/lblDevice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
