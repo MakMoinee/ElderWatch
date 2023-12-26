@@ -44,7 +44,6 @@ public class PatientFragment extends Fragment {
         pDialog = new ProgressDialog(requireContext());
         pDialog.setMessage("Loading ...");
         pDialog.setCancelable(false);
-        loadData();
         setListeners();
         return binding.getRoot();
     }
@@ -52,6 +51,7 @@ public class PatientFragment extends Fragment {
     private void loadData() {
         pDialog.show();
         patientsList = new ArrayList<>();
+        binding.recycler.setAdapter(null);
         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                 .setCollectionName(FSRequest.PATIENTS_COLLECTION)
                 .build();
@@ -104,5 +104,14 @@ public class PatientFragment extends Fragment {
             Intent intent = new Intent(requireContext(), ActivityAddPatient.class);
             requireContext().startActivity(intent);
         });
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        patientsList = new ArrayList<>();
+        binding.recycler.setAdapter(null);
+        loadData();
     }
 }

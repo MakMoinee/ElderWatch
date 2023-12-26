@@ -14,6 +14,7 @@ public class Patients {
     private String fullName;
     private String address;
     private String birthDate;
+    private String deviceID;
 
     public Patients(PatientBuilder builder) {
         this.patientID = builder.patientID;
@@ -23,6 +24,7 @@ public class Patients {
         this.address = builder.address;
         this.birthDate = builder.birthDate;
         this.fullName = builder.fullName;
+        this.deviceID = builder.deviceID;
     }
 
     public static class PatientBuilder {
@@ -34,6 +36,8 @@ public class Patients {
         private String birthDate;
 
         private String fullName;
+
+        private String deviceID;
 
         public PatientBuilder setFullName(String fullName) {
             this.fullName = fullName;
@@ -67,6 +71,11 @@ public class Patients {
 
         public PatientBuilder setBirthDate(String birthDate) {
             this.birthDate = birthDate;
+            return this;
+        }
+
+        public PatientBuilder setDeviceID(String deviceID) {
+            this.deviceID = deviceID;
             return this;
         }
 

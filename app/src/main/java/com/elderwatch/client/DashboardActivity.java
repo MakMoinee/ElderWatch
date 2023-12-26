@@ -39,12 +39,15 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
     ProgressDialog pDialog;
     FSRequest request;
 
+    String userID = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        userID = new UserPref(DashboardActivity.this).getUserID();
         request = new FSRequest();
         pDialog = new ProgressDialog(DashboardActivity.this);
         pDialog.setMessage("Loading ...");
@@ -76,14 +79,37 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_generate_qr,R.id.nav_patients, R.id.nav_activities, R.id.nav_gallery, R.id.nav_devices, R.id.nav_logout)
+                R.id.nav_home, R.id.nav_generate_qr, R.id.nav_patients, R.id.nav_activities, R.id.nav_gallery, R.id.nav_devices, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+    }
 
-        loadPatients();
+    private void loadDevices() {
+        pDialog.show();
+        FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                .setCollectionName(FSRequest.DEVICES_COLLECTION)
+                .setWhereFromField("userID")
+                .setWhereValueField(userID)
+                .build();
+
+        request.findAll(body, new FirestoreListener() {
+            @Override
+            public <T> void onSuccess(T any) {
+                loadPatients();
+            }
+
+            @Override
+            public void onError(Error error) {
+                pDialog.dismiss();
+                Toast.makeText(DashboardActivity.this, "There's no devices added yet, please add", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(DashboardActivity.this, AddDevicesActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void loadPatients() {
@@ -95,8 +121,7 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
             @Override
             public <T> void onSuccess(T any) {
                 pDialog.dismiss();
-                if (any instanceof QuerySnapshot) {
-                    QuerySnapshot snapshots = (QuerySnapshot) any;
+                if (any instanceof QuerySnapshot snapshots) {
                     if (snapshots.isEmpty()) {
                         Toast.makeText(DashboardActivity.this, "There's no patient added yet, please add", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(DashboardActivity.this, ActivityAddPatient.class);
@@ -141,6 +166,6 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
     protected void onResume() {
         super.onResume();
         pDialog.show();
-        loadPatients();
+        loadDevices();
     }
 }

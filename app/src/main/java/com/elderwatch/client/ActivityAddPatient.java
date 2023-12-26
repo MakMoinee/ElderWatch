@@ -3,6 +3,8 @@ package com.elderwatch.client;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,8 +35,11 @@ public class ActivityAddPatient extends AppCompatActivity {
     FSRequest request;
 
     List<Devices> devicesList = new ArrayList<>();
+    List<String> ipAddress = new ArrayList<>();
 
     String userID = "";
+
+    String selectedDeviceID = "";
 
 
     @Override
@@ -50,6 +55,7 @@ public class ActivityAddPatient extends AppCompatActivity {
     }
 
     private void getAllActiveDevices() {
+        selectedDeviceID = "";
         devicesList = new ArrayList<>();
         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                 .setCollectionName(FSRequest.DEVICES_COLLECTION)
@@ -76,6 +82,8 @@ public class ActivityAddPatient extends AppCompatActivity {
                     if (devicesList.size() == 0) {
                         Toast.makeText(ActivityAddPatient.this, "There are no devices added yet, please add device before adding patient", Toast.LENGTH_SHORT).show();
                         finish();
+                    } else {
+                        convertList();
                     }
                 }
             }
@@ -89,6 +97,19 @@ public class ActivityAddPatient extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void convertList() {
+        for (Devices devices : devicesList) {
+            ipAddress.add(devices.getIp());
+        }
+
+        if (ipAddress.size() > 0) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(ActivityAddPatient.this, android.R.layout.simple_spinner_item, ipAddress);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            binding.spinner.setAdapter(adapter);
+        }
     }
 
     private void setListeners() {
@@ -109,6 +130,7 @@ public class ActivityAddPatient extends AppCompatActivity {
                         .setAddress(address)
                         .setBirthDate(birthDate)
                         .setFullName(String.format("%s %s %s", firstName, middleName, lastName))
+                        .setDeviceID(selectedDeviceID)
                         .build();
 
                 FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
@@ -148,6 +170,9 @@ public class ActivityAddPatient extends AppCompatActivity {
 
                                     @Override
                                     public void onError(Error error) {
+                                        if (error != null && error.getLocalizedMessage() != null) {
+                                            Log.e("error_add_patient", error.getLocalizedMessage());
+                                        }
                                         FirestoreRequestBody b2 = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                                                 .setCollectionName(FSRequest.PATIENTS_COLLECTION)
                                                 .setDocumentID(id)
@@ -175,6 +200,21 @@ public class ActivityAddPatient extends AppCompatActivity {
                         Toast.makeText(ActivityAddPatient.this, "Patient Already Exist", Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+        });
+
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (devicesList.size() > 0) {
+                    selectedDeviceID = devicesList.get(adapterView.getSelectedItemPosition()).getDeviceID();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
