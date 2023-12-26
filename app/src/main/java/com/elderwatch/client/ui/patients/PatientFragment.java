@@ -1,6 +1,7 @@
 package com.elderwatch.client.ui.patients;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.elderwatch.client.ActivityAddPatient;
 import com.elderwatch.client.adapters.PatientAdapter;
 import com.elderwatch.client.databinding.FragmentPatientBinding;
 import com.elderwatch.client.interfaces.PatientListener;
@@ -77,6 +79,11 @@ public class PatientFragment extends Fragment {
                             public void onClickListener() {
 
                             }
+
+                            @Override
+                            public void onLongClickListener(Patients p) {
+                                Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT).show();
+                            }
                         });
                         binding.recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
                         binding.recycler.setAdapter(adapter);
@@ -93,11 +100,9 @@ public class PatientFragment extends Fragment {
     }
 
     private void setListeners() {
-        binding.btnAddPatient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
+        binding.btnAddPatient.setOnClickListener(view -> {
+            Intent intent = new Intent(requireContext(), ActivityAddPatient.class);
+            requireContext().startActivity(intent);
         });
     }
 }
