@@ -1,10 +1,12 @@
 package com.elderwatch.client;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import com.elderwatch.client.services.FSRequest;
 import com.github.MakMoinee.library.common.MapForm;
 import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
+import com.github.MakMoinee.library.widgets.DatePickerFragment;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -28,7 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ActivityAddPatient extends AppCompatActivity {
+public class ActivityAddPatient extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     ActivityAddPatientBinding binding;
 
@@ -41,6 +44,8 @@ public class ActivityAddPatient extends AppCompatActivity {
 
     String selectedDeviceID = "";
 
+    DatePickerFragment datePickerFragment;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class ActivityAddPatient extends AppCompatActivity {
         setContentView(binding.getRoot());
         request = new FSRequest();
         userID = new UserPref(ActivityAddPatient.this).getUserID();
+        datePickerFragment = new DatePickerFragment(1,1,1900,this);
         setTitle("Add Patient");
         getAllActiveDevices();
         setListeners();
@@ -129,7 +135,7 @@ public class ActivityAddPatient extends AppCompatActivity {
                         .setLastName(lastName)
                         .setAddress(address)
                         .setBirthDate(birthDate)
-                        .setFullName(String.format("%s %s %s", firstName, middleName, lastName))
+                        .setFullName(String.format("%s %s %s", firstName, middleName, lastName).toLowerCase())
                         .setDeviceID(selectedDeviceID)
                         .build();
 
@@ -217,5 +223,25 @@ public class ActivityAddPatient extends AppCompatActivity {
 
             }
         });
+
+        binding.editBirthDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        Calendar selectedDate = Calendar.getInstance();
+        selectedDate.set(Calendar.YEAR, year);
+        selectedDate.set(Calendar.MONTH, month);
+        selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(selectedDate.getTime());
+        binding.editBirthDate.setText(formattedDate);
     }
 }
