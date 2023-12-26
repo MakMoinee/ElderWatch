@@ -13,4 +13,5 @@ public class Devices {
     private String ip;
     private String username;
     private String password;
+    private String status;
 }

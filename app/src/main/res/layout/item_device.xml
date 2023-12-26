@@ -19,8 +19,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackground"
-                android:padding="5dp">
+                android:padding="10dp">
 
+                <ImageView
+                    android:id="@+id/imgDevice"
+                    android:src="@drawable/ic_devices"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+                <TextView
+                    android:id="@+id/lblIP"
+                    android:textStyle="bold"
+                    android:text="IP:"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imgDevice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/txtIP"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/lblIP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/lblStatus"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/black"
+                    android:text="Status:"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/lblIP"
+                    android:layout_toRightOf="@+id/imgDevice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/txtStatus"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/lblStatus"
+                    android:layout_below="@id/txtIP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>

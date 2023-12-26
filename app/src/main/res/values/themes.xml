@@ -20,6 +20,14 @@
         <item name="colorAccent">@color/dark_bg</item>
     </style>
 
+    <style name="CustomThemeRed" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">#96000D</item>
+        <item name="colorSecondary">#DF2E51</item>
+        <item name="colorAccent">#960012</item>
+    </style>
+
     <style name="CustomThemeBGWithAction" parent="Theme.Material3.DayNight">
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>

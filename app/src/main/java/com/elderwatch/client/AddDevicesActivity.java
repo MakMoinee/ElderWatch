@@ -59,7 +59,7 @@ public class AddDevicesActivity extends AppCompatActivity {
                 Toast.makeText(AddDevicesActivity.this, "Please Don't Leave Empty Fields", Toast.LENGTH_SHORT).show();
             } else {
                 progressDialog.show();
-                Devices devices = new Devices(null, userID, ip, username, password);
+                Devices devices = new Devices(null, userID, ip, username, password,null);
 
                 LocalVolleyRequestBody vBody = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
                         .setUrl(String.format(VRequest.pingCameraURLString,ip,userID))
