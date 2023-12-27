@@ -7,10 +7,20 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.elderwatch.client.R;
+import com.elderwatch.client.commons.Commons;
+import com.elderwatch.client.preference.DeviceTokenPref;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessageReceiver extends FirebaseMessagingService {
+
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+        Commons.deviceToken = token;
+        new DeviceTokenPref(this).storeToken(token);
+    }
 
     @SuppressLint("MissingPermission")
     @Override
