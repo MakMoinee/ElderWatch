@@ -69,7 +69,6 @@ public class DevicesFragment extends Fragment {
         pDialog.setCancelable(false);
         binding = FragmentDevicesBinding.inflate(LayoutInflater.from(requireContext()), container, false);
         setListeners();
-        loadList();
         return binding.getRoot();
     }
 
@@ -221,5 +220,12 @@ public class DevicesFragment extends Fragment {
             Intent intent = new Intent(requireContext(), AddDevicesActivity.class);
             requireContext().startActivity(intent);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        binding.recycler.setAdapter(null);
+        loadList();
     }
 }

@@ -5,12 +5,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
 
     String userID = "";
     HashPass hashPass = new HashPass();
+
+    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 1001;
 
     private ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(), result -> {
         if (result.getContents() == null) {
@@ -171,11 +175,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        requestNotificationPermission();
         pDialog = new ProgressDialog(LoginActivity.this);
         pDialog.setMessage("Loading ...");
         pDialog.setCancelable(false);
         request = new FSRequest();
         userID = "";
+
         setListeners();
         if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
@@ -208,6 +214,20 @@ public class LoginActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
         }
 
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.
+                    WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        NOTIFICATION_PERMISSION_REQUEST_CODE);
+            } else {
+            }
+        } else {
+        }
     }
 
     private void setListeners() {
@@ -308,6 +328,20 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
             startActivity(intent);
             finish();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, perform necessary operations
+                // initNotifications();
+            } else {
+                // Permission denied, inform the user
+                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
