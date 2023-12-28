@@ -54,6 +54,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-messaging'
 
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
+
     implementation 'com.github.MakMoinee:library:1.0.41'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'org.projectlombok:lombok:1.18.28'

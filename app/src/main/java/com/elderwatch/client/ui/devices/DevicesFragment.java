@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
@@ -219,6 +220,11 @@ public class DevicesFragment extends Fragment {
         binding.btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), AddDevicesActivity.class);
             requireContext().startActivity(intent);
+        });
+        binding.refresh.setOnRefreshListener(() -> {
+            binding.refresh.setRefreshing(false);
+            binding.recycler.setAdapter(null);
+            loadList();
         });
     }
 
