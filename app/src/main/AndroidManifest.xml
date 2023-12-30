@@ -66,6 +66,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/CustomThemeBGWithAction" />
 
+        <activity
+            android:name=".ActivityHistoryDetail"
+            android:parentActivityName=".DashboardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomThemeBGWithAction" />
+
         <receiver
             android:name=".services.NotificationReceiver"
             android:exported="true">

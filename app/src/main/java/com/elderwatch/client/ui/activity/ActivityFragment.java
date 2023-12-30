@@ -1,5 +1,6 @@
 package com.elderwatch.client.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.elderwatch.client.ActivityHistoryDetail;
 import com.elderwatch.client.adapters.ActivityHistoryAdapter;
 import com.elderwatch.client.databinding.FragmentActivityBinding;
 import com.elderwatch.client.interfaces.ActivityHistoryListener;
@@ -25,6 +28,7 @@ import com.github.MakMoinee.library.interfaces.FirestoreListener;
 import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +54,15 @@ public class ActivityFragment extends Fragment {
         patientsList = new ArrayList<>();
         caregiverActivityList = new ArrayList<>();
         userID = new UserPref(requireContext()).getUserID();
+        setListeners();
         return binding.getRoot();
+    }
+
+    private void setListeners() {
+        binding.refresh.setOnRefreshListener(() -> {
+            binding.refresh.setRefreshing(false);
+            loadActivityList();
+        });
     }
 
     @Override
@@ -165,6 +177,14 @@ public class ActivityFragment extends Fragment {
                         @Override
                         public void onClickListener() {
 
+                        }
+
+                        @Override
+                        public void clickActivityHistoryItem(Patients patients, ActivityHistory history) {
+                            Intent intent = new Intent(requireContext(), ActivityHistoryDetail.class);
+                            intent.putExtra("patient",new Gson().toJson(patients));
+                            intent.putExtra("history",new Gson().toJson(history));
+                            requireContext().startActivity(intent);
                         }
                     });
                     binding.recycler.setLayoutManager(new LinearLayoutManager(requireContext()));

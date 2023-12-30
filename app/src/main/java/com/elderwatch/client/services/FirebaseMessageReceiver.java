@@ -64,6 +64,7 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
 
         // Build the notification
         Intent intent = new Intent(this, DashboardActivity.class);
+        intent.putExtra("clickActivity",true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);

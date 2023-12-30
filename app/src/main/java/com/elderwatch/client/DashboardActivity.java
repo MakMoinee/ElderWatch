@@ -96,6 +96,11 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         updateToken();
+
+        boolean clickActivity = getIntent().getBooleanExtra("clickActivity",false);
+        if(clickActivity){
+            navController.navigate(R.id.nav_activities);
+        }
     }
 
     private void updateToken() {
