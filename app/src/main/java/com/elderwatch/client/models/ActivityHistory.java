@@ -1,7 +1,9 @@
 package com.elderwatch.client.models;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 public class ActivityHistory
 {
@@ -10,6 +12,16 @@ public class ActivityHistory
     private String imagePath;
     private String createdAt;
     private String status;
+    private String ip;
+
+    public ActivityHistory(ActivityHistoryBuilder builder){
+        this.activityHistoryID = builder.activityHistoryID;
+        this.caregiverID = builder.caregiverID;
+        this.imagePath = builder.imagePath;
+        this.createdAt = builder.createdAt;
+        this.status = builder.status;
+        this.ip = builder.ip;
+    }
 
     public static class ActivityHistoryBuilder{
         private String activityHistoryID;
@@ -17,6 +29,8 @@ public class ActivityHistory
         private String imagePath;
         private String createdAt;
         private String status;
+
+        private String ip;
 
         public ActivityHistoryBuilder setActivityHistoryID(String activityHistoryID) {
             this.activityHistoryID = activityHistoryID;
@@ -41,6 +55,15 @@ public class ActivityHistory
         public ActivityHistoryBuilder setStatus(String status) {
             this.status = status;
             return this;
+        }
+
+        public ActivityHistoryBuilder setIp(String ip) {
+            this.ip = ip;
+            return this;
+        }
+
+        public ActivityHistory build(){
+            return new ActivityHistory(this);
         }
     }
 }

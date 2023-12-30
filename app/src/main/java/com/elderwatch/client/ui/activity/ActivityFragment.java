@@ -16,6 +16,7 @@ import com.elderwatch.client.adapters.ActivityHistoryAdapter;
 import com.elderwatch.client.databinding.FragmentActivityBinding;
 import com.elderwatch.client.interfaces.ActivityHistoryListener;
 import com.elderwatch.client.models.ActivityHistory;
+import com.elderwatch.client.models.CaregiverActivity;
 import com.elderwatch.client.models.Devices;
 import com.elderwatch.client.models.Patients;
 import com.elderwatch.client.preference.UserPref;
@@ -38,7 +39,7 @@ public class ActivityFragment extends Fragment {
     ActivityHistoryAdapter adapter;
 
     List<Patients> patientsList;
-    List<Devices> devicesList;
+    List<CaregiverActivity> caregiverActivityList;
 
     @Nullable
     @Override
@@ -47,7 +48,7 @@ public class ActivityFragment extends Fragment {
         request = new FSRequest();
         historyList = new ArrayList<>();
         patientsList = new ArrayList<>();
-        devicesList = new ArrayList<>();
+        caregiverActivityList = new ArrayList<>();
         userID = new UserPref(requireContext()).getUserID();
         return binding.getRoot();
     }
@@ -57,7 +58,7 @@ public class ActivityFragment extends Fragment {
         super.onResume();
         binding.recycler.setAdapter(null);
         loadActivityList();
-        loadPatientList();
+
     }
 
     private void loadActivityList() {
@@ -85,14 +86,8 @@ public class ActivityFragment extends Fragment {
                     }
 
                     if (historyList.size() > 0) {
-                        adapter = new ActivityHistoryAdapter(requireContext(), historyList, new ActivityHistoryListener() {
-                            @Override
-                            public void onClickListener() {
+                        loadPatientList();
 
-                            }
-                        });
-                        binding.recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
-                        binding.recycler.setAdapter(adapter);
                     }
                 }
             }
@@ -108,8 +103,6 @@ public class ActivityFragment extends Fragment {
         patientsList = new ArrayList<>();
         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                 .setCollectionName(FSRequest.PATIENTS_COLLECTION)
-                .setWhereFromField("userID")
-                .setWhereValueField(userID)
                 .build();
 
         request.findAll(body, new FirestoreListener() {
@@ -128,6 +121,10 @@ public class ActivityFragment extends Fragment {
                         }
                     }
                 }
+
+                if(patientsList.size()>0){
+                    loadCaregiverActivity();
+                }
             }
 
             @Override
@@ -139,11 +136,11 @@ public class ActivityFragment extends Fragment {
         });
     }
 
-    private void loadDevices() {
-        devicesList = new ArrayList<>();
+    private void loadCaregiverActivity() {
+        caregiverActivityList = new ArrayList<>();
         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
-                .setCollectionName(FSRequest.DEVICES_COLLECTION)
-                .setWhereFromField("userID")
+                .setCollectionName(FSRequest.CAREGIVER_ACTIVITY_COLLECTION)
+                .setWhereFromField("caregiverID")
                 .setWhereValueField(userID)
                 .build();
 
@@ -154,14 +151,24 @@ public class ActivityFragment extends Fragment {
                     if (!snapshots.isEmpty()) {
                         for (DocumentSnapshot documentSnapshot : snapshots) {
                             if (documentSnapshot.exists()) {
-                                Devices devices = documentSnapshot.toObject(Devices.class);
-                                if (devices != null) {
-                                    devices.setDeviceID(documentSnapshot.getId());
-                                    devicesList.add(devices);
+                                CaregiverActivity caregiverActivity = documentSnapshot.toObject(CaregiverActivity.class);
+                                if (caregiverActivity != null) {
+                                    caregiverActivity.setActivityID(documentSnapshot.getId());
+                                    caregiverActivityList.add(caregiverActivity);
                                 }
                             }
                         }
                     }
+                }
+                if(caregiverActivityList.size()>0){
+                    adapter = new ActivityHistoryAdapter(requireContext(), historyList, patientsList, caregiverActivityList, new ActivityHistoryListener() {
+                        @Override
+                        public void onClickListener() {
+
+                        }
+                    });
+                    binding.recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    binding.recycler.setAdapter(adapter);
                 }
             }
 
