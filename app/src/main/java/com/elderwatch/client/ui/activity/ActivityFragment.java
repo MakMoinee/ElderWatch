@@ -127,6 +127,7 @@ public class ActivityFragment extends Fragment {
                                 Patients patients = documentSnapshot.toObject(Patients.class);
                                 if (patients != null) {
                                     patients.setPatientID(documentSnapshot.getId());
+                                    patients.setFullName(String.format("%s %s %s",patients.getFirstName(),patients.getMiddleName(),patients.getLastName()));
                                     patientsList.add(patients);
                                 }
                             }

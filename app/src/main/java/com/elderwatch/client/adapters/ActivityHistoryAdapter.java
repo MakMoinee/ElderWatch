@@ -54,6 +54,7 @@ public class ActivityHistoryAdapter extends RecyclerView.Adapter<ActivityHistory
         if(!patientID.isEmpty()){
             for(Patients patients: patientsList){
                 if(patients.getPatientID().equals(patientID)){
+                    patients.setFullName(String.format("%s %s %s",patients.getFirstName(),patients.getMiddleName(),patients.getLastName()));
                     holder.txtPatientName.setText(patients.getFullName());
                     holder.itemView.setOnClickListener(view -> listener.clickActivityHistoryItem(patients,history));
                     break;
