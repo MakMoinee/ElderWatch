@@ -2,7 +2,10 @@ package com.elderwatch.client;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import com.github.MakMoinee.library.models.FirestoreRequestBody;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -48,6 +52,8 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
     String userID = "";
     String token = "";
+
+    private static final int OVERLAY_PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +106,15 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         boolean clickActivity = getIntent().getBooleanExtra("clickActivity",false);
         if(clickActivity){
             navController.navigate(R.id.nav_activities);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            // If not granted, request the permission
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+        } else {
+            // Permission is already granted, you can display windows with TYPE_APPLICATION_OVERLAY
         }
     }
 
@@ -260,5 +275,12 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         super.onResume();
         pDialog.show();
         loadDevices();
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

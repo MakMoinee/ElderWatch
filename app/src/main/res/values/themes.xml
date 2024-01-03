@@ -20,6 +20,14 @@
         <item name="colorAccent">@color/dark_bg</item>
     </style>
 
+    <style name="AppCompatAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/bg</item>
+        <item name="colorSecondary">@color/medium_bg</item>
+        <item name="colorAccent">@color/dark_bg</item>
+    </style>
+
     <style name="CustomThemeRed" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -8,14 +8,18 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 
 import com.elderwatch.client.DashboardActivity;
 import com.elderwatch.client.R;
+
+import org.checkerframework.checker.units.qual.A;
 
 public class NotificationReceiver extends BroadcastReceiver {
     public static final int NOTIFICATION_ID = 1;
@@ -49,5 +53,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         notificationManager.createNotificationChannel(notificationChannel);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+
+
     }
 }

@@ -25,6 +25,25 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imgScreenshot"
             android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@android:color/black"
+            android:text="Date"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/txtPatientName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:theme="@style/CustomThemeRed"
+            android:id="@+id/btnResponded"
+            android:text="Mark As Responded"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
