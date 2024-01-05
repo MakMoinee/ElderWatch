@@ -14,4 +14,10 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="web_client_id">1034148438127-f6cbuujqda89qiml3lhiok9ptv5alg4o.apps.googleusercontent.com</string>
     <string name="title_activity_parent_dashboard">ParentDashboardActivity</string>
+
+    <string-array name="remarks_item">
+        <item>False Alarm Not Incident.</item>
+        <item>Patient Is Okay And Safe From Injuries</item>
+        <item>Patient is in need to further check up injuries</item>
+    </string-array>
 </resources>

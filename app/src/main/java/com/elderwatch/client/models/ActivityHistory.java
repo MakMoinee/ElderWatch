@@ -13,6 +13,7 @@ public class ActivityHistory
     private String createdAt;
     private String status;
     private String ip;
+    private String remarks;
 
     public ActivityHistory(ActivityHistoryBuilder builder){
         this.activityHistoryID = builder.activityHistoryID;
@@ -21,6 +22,7 @@ public class ActivityHistory
         this.createdAt = builder.createdAt;
         this.status = builder.status;
         this.ip = builder.ip;
+        this.remarks = builder.remarks;
     }
 
     public static class ActivityHistoryBuilder{
@@ -31,6 +33,11 @@ public class ActivityHistory
         private String status;
 
         private String ip;
+        private String remarks;
+
+        public void setRemarks(String remarks) {
+            this.remarks = remarks;
+        }
 
         public ActivityHistoryBuilder setActivityHistoryID(String activityHistoryID) {
             this.activityHistoryID = activityHistoryID;
