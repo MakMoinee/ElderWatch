@@ -114,6 +114,7 @@ public class ActivityHistoryDetail extends AppCompatActivity {
                     }
                 }
             });
+            binding.txtDate.setText(String.format("Date: %s", history.getCreatedAt()));
 
 
         }
