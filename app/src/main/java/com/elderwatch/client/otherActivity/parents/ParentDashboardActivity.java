@@ -20,6 +20,7 @@ import com.elderwatch.client.R;
 import com.elderwatch.client.commons.Commons;
 import com.elderwatch.client.databinding.ActivityParentDashboardBinding;
 import com.elderwatch.client.interfaces.LogoutListener;
+import com.elderwatch.client.models.ParentCustomToken;
 import com.elderwatch.client.models.Users;
 import com.elderwatch.client.preference.DeviceTokenPref;
 import com.elderwatch.client.preference.UserPref;
@@ -88,14 +89,15 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
             token = Commons.deviceToken;
             new DeviceTokenPref(ParentDashboardActivity.this).storeToken(token);
         }
-        DeviceToken deviceToken = new DeviceToken.DeviceTokenBuilder()
+        ParentCustomToken deviceToken = new ParentCustomToken.ParentCustomTokenBuilder()
                 .setDeviceToken(token)
-                .setUserID(userID)
+                .setUserID(caregiverID)
+                .setUserIDMap(userID)
                 .build();
         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                 .setCollectionName(FSRequest.TOKEN_COLLECTION)
                 .setParams(MapForm.convertObjectToMap(deviceToken))
-                .setWhereFromField("userID")
+                .setWhereFromField("userIDMap")
                 .setWhereValueField(userID)
                 .build();
 
