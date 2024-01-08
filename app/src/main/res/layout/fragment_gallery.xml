@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="Sample Output"
+                    android:text="Capture Detection"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />

@@ -340,7 +340,7 @@ public class LoginActivity extends AppCompatActivity {
                 // initNotifications();
             } else {
                 // Permission denied, inform the user
-                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }

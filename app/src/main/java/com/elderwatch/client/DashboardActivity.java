@@ -37,6 +37,7 @@ import com.elderwatch.client.databinding.ActivityDashboardBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -52,6 +53,7 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
     String userID = "";
     String token = "";
+    String tokenID = "";
 
     private static final int OVERLAY_PERMISSION_REQUEST_CODE = 100;
 
@@ -103,8 +105,8 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         NavigationUI.setupWithNavController(navigationView, navController);
         updateToken();
 
-        boolean clickActivity = getIntent().getBooleanExtra("clickActivity",false);
-        if(clickActivity){
+        boolean clickActivity = getIntent().getBooleanExtra("clickActivity", false);
+        if (clickActivity) {
             navController.navigate(R.id.nav_activities);
         }
 
@@ -153,6 +155,7 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
                     if (toBeUpdated != null) {
                         toBeUpdated.setDeviceToken(token);
+                        tokenID = toBeUpdated.getDocID();
                         FirestoreRequestBody newBody = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                                 .setCollectionName(FSRequest.TOKEN_COLLECTION)
                                 .setParams(MapForm.convertObjectToMap(deviceToken))
@@ -181,6 +184,11 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
                 request.insertUniqueData(body, new FirestoreListener() {
                     @Override
                     public <T> void onSuccess(T any) {
+                        if (any instanceof String id) {
+                            if (!id.isEmpty()) {
+                                tokenID = id;
+                            }
+                        }
                         Log.e("success_insert_token", "true");
                     }
 
@@ -260,9 +268,28 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
     @Override
     public void logoutCallFinish() {
-        Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        new UserPref(DashboardActivity.this).clearLogin();
+        FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                .setCollectionName(FSRequest.TOKEN_COLLECTION)
+                .setDocumentID(tokenID)
+                .build();
+
+        request.delete(body, new FirestoreListener() {
+            @Override
+            public <T> void onSuccess(T any) {
+                Toast.makeText(DashboardActivity.this, "Logout Successfully", Toast.LENGTH_SHORT).show();
+                new UserPref(DashboardActivity.this).clearLogin();
+                Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onError(Error error) {
+                Toast.makeText(DashboardActivity.this, "Failed to logout, please try again later", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
@@ -276,7 +303,6 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         pDialog.show();
         loadDevices();
     }
-
 
 
     @Override
