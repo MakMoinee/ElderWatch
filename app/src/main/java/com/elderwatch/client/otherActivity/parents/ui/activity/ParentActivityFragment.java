@@ -30,7 +30,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ParentActivityFragment extends Fragment {
@@ -151,6 +154,21 @@ public class ParentActivityFragment extends Fragment {
                                                 if (numberOfQueries == patientGuardianList.size()) {
                                                     if (historyList.size() > 0) {
                                                         myDialog.dismiss();
+                                                        historyList.sort((history1, history2) -> {
+                                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                                            try {
+                                                                Date date1 = format.parse(history1.getCreatedAt());
+                                                                Date date2 = format.parse(history2.getCreatedAt());
+
+                                                                // Compare the parsed dates
+                                                                return date2.compareTo(date1);
+                                                            } catch (ParseException e) {
+                                                                if (e != null && e.getLocalizedMessage() != null) {
+                                                                    Log.e("error_sort", e.getLocalizedMessage());
+                                                                }
+                                                                return 0; // Handle parsing exceptions as needed
+                                                            }
+                                                        });
                                                         adapter = new ParentActivityAdapter(requireContext(), historyList, patientsList, patientGuardianList, new ActivityHistoryListener() {
                                                             @Override
                                                             public void onClickListener() {

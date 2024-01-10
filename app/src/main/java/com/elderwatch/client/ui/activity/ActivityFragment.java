@@ -30,7 +30,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class ActivityFragment extends Fragment {
@@ -97,6 +102,22 @@ public class ActivityFragment extends Fragment {
                         }
                     }
 
+                    historyList.sort((history1, history2) -> {
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        try {
+                            Date date1 = format.parse(history1.getCreatedAt());
+                            Date date2 = format.parse(history2.getCreatedAt());
+
+                            // Compare the parsed dates
+                            return date2.compareTo(date1);
+                        } catch (ParseException e) {
+                            if (e != null && e.getLocalizedMessage() != null) {
+                                Log.e("error_sort", e.getLocalizedMessage());
+                            }
+                            return 0; // Handle parsing exceptions as needed
+                        }
+                    });
+
                     if (historyList.size() > 0) {
                         loadPatientList();
 
@@ -127,7 +148,7 @@ public class ActivityFragment extends Fragment {
                                 Patients patients = documentSnapshot.toObject(Patients.class);
                                 if (patients != null) {
                                     patients.setPatientID(documentSnapshot.getId());
-                                    patients.setFullName(String.format("%s %s %s",patients.getFirstName(),patients.getMiddleName(),patients.getLastName()));
+                                    patients.setFullName(String.format("%s %s %s", patients.getFirstName(), patients.getMiddleName(), patients.getLastName()));
                                     patientsList.add(patients);
                                 }
                             }
@@ -135,7 +156,7 @@ public class ActivityFragment extends Fragment {
                     }
                 }
 
-                if(patientsList.size()>0){
+                if (patientsList.size() > 0) {
                     loadCaregiverActivity();
                 }
             }
@@ -173,7 +194,7 @@ public class ActivityFragment extends Fragment {
                         }
                     }
                 }
-                if(caregiverActivityList.size()>0){
+                if (caregiverActivityList.size() > 0) {
                     adapter = new ActivityHistoryAdapter(requireContext(), historyList, patientsList, caregiverActivityList, new ActivityHistoryListener() {
                         @Override
                         public void onClickListener() {
@@ -183,8 +204,8 @@ public class ActivityFragment extends Fragment {
                         @Override
                         public void clickActivityHistoryItem(Patients patients, ActivityHistory history) {
                             Intent intent = new Intent(requireContext(), ActivityHistoryDetail.class);
-                            intent.putExtra("patient",new Gson().toJson(patients));
-                            intent.putExtra("history",new Gson().toJson(history));
+                            intent.putExtra("patient", new Gson().toJson(patients));
+                            intent.putExtra("history", new Gson().toJson(history));
                             requireContext().startActivity(intent);
                         }
                     });

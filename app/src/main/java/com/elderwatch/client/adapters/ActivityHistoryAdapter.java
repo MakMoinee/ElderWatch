@@ -37,26 +37,31 @@ public class ActivityHistoryAdapter extends RecyclerView.Adapter<ActivityHistory
     @NonNull
     @Override
     public ActivityHistoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View mView = LayoutInflater.from(mContext).inflate(R.layout.item_activity_history,parent,false);
+        View mView = LayoutInflater.from(mContext).inflate(R.layout.item_activity_history, parent, false);
         return new ViewHolder(mView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ActivityHistoryAdapter.ViewHolder holder, int position) {
         ActivityHistory history = historyList.get(position);
+        if (position == 0) {
+            holder.txtRecent.setText("New");
+        } else if (position > 1) {
+            holder.txtRecent.setVisibility(View.GONE);
+        }
         String patientID = "";
-        for(CaregiverActivity caregiverActivity: caregiverActivityList){
-            if(history.getCaregiverID().equals(caregiverActivity.getCaregiverID())){
+        for (CaregiverActivity caregiverActivity : caregiverActivityList) {
+            if (history.getCaregiverID().equals(caregiverActivity.getCaregiverID())) {
                 patientID = caregiverActivity.getPatientID();
                 break;
             }
         }
-        if(!patientID.isEmpty()){
-            for(Patients patients: patientsList){
-                if(patients.getPatientID().equals(patientID)){
-                    patients.setFullName(String.format("%s %s %s",patients.getFirstName(),patients.getMiddleName(),patients.getLastName()));
+        if (!patientID.isEmpty()) {
+            for (Patients patients : patientsList) {
+                if (patients.getPatientID().equals(patientID)) {
+                    patients.setFullName(String.format("%s %s %s", patients.getFirstName(), patients.getMiddleName(), patients.getLastName()));
                     holder.txtPatientName.setText(patients.getFullName());
-                    holder.itemView.setOnClickListener(view -> listener.clickActivityHistoryItem(patients,history));
+                    holder.itemView.setOnClickListener(view -> listener.clickActivityHistoryItem(patients, history));
                     break;
                 }
             }
@@ -71,11 +76,13 @@ public class ActivityHistoryAdapter extends RecyclerView.Adapter<ActivityHistory
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtMessage,txtPatientName;
+        TextView txtMessage, txtPatientName, txtRecent;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMessage = itemView.findViewById(R.id.txtMessage);
             txtPatientName = itemView.findViewById(R.id.txtPatientName);
+            txtRecent = itemView.findViewById(R.id.txtRecent);
         }
     }
 }
