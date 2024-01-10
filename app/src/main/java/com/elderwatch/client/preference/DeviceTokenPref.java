@@ -22,4 +22,6 @@ public class DeviceTokenPref {
     public String getToken() {
         return pref.getString("deviceToken", "");
     }
+
+
 }

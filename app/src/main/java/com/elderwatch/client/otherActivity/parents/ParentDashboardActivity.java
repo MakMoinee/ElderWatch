@@ -33,6 +33,7 @@ import com.elderwatch.client.models.PatientGuardian;
 import com.elderwatch.client.models.Patients;
 import com.elderwatch.client.models.Users;
 import com.elderwatch.client.preference.DeviceTokenPref;
+import com.elderwatch.client.preference.IpPref;
 import com.elderwatch.client.preference.UserPref;
 import com.elderwatch.client.services.FSRequest;
 import com.github.MakMoinee.library.common.MapForm;
@@ -110,10 +111,12 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
             token = Commons.deviceToken;
             new DeviceTokenPref(ParentDashboardActivity.this).storeToken(token);
         }
+        String ip = new IpPref(ParentDashboardActivity.this).getIP();
         ParentCustomToken deviceToken = new ParentCustomToken.ParentCustomTokenBuilder()
                 .setDeviceToken(token)
                 .setUserID(caregiverID)
                 .setUserIDMap(userID)
+                .setIp(ip)
                 .build();
         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                 .setCollectionName(FSRequest.TOKEN_COLLECTION)
@@ -285,6 +288,8 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
                                                         .setIp(devices.getIp())
                                                         .build();
 
+                                                new IpPref(ParentDashboardActivity.this).storeIP(devices.getIp());
+
                                                 FirestoreRequestBody vBody = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                                                         .setCollectionName(FSRequest.PG_COLLECTION)
                                                         .setParams(MapForm.convertObjectToMap(patientGuardian))
@@ -373,6 +378,7 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
             public <T> void onSuccess(T any) {
                 Toast.makeText(ParentDashboardActivity.this, "Logout Successfully", Toast.LENGTH_SHORT).show();
                 new UserPref(ParentDashboardActivity.this).clearLogin();
+                new IpPref(ParentDashboardActivity.this).clear();
                 Intent intent = new Intent(ParentDashboardActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
