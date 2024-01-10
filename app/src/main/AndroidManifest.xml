@@ -87,6 +87,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".PatientDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ElderWatch" />
     </application>
 
 </manifest>

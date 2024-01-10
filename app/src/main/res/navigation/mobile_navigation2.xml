@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_parent_activity"
-        android:name="com.elderwatch.client.ui.activity.ActivityFragment"
+        android:name="com.elderwatch.client.otherActivity.parents.ui.activity.ParentActivityFragment"
         android:label="Activity"
         tools:layout="@layout/fragment_activity" />
 

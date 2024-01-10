@@ -62,6 +62,13 @@ public class ActivityHistoryDetail extends AppCompatActivity {
                 }
             }
         }
+
+        boolean fromParent = getIntent().getBooleanExtra("fromParent", false);
+        if (fromParent) {
+            binding.btnResponded.setText("Not Responded Yet");
+            binding.btnResponded.setEnabled(false);
+            binding.spinner.setVisibility(View.INVISIBLE);
+        }
         loadData();
 
     }

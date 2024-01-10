@@ -12,6 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class FSRequest extends FirestoreRequest {
 
     public static final String DEVICES_COLLECTION = "devices";
+    public static final String PG_COLLECTION = "patient_guardian";
     public static final String PATIENTS_COLLECTION = "patients";
     public static final String ACTIVITY_COLLECTION = "activity";
     public static final String ACTIVITY_HISTORY_COLLECTION = "activity_history";
