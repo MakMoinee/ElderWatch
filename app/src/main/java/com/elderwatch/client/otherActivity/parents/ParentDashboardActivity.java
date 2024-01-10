@@ -2,7 +2,10 @@ package com.elderwatch.client.otherActivity.parents;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -69,6 +73,8 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
     String selectedPatientID = "";
     String selectedDeviceID = "";
 
+    private static final int OVERLAY_PERMISSION_REQUEST_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +109,25 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
         }
 
         updateToken();
+
+        boolean clickActivity = getIntent().getBooleanExtra("clickActivity", false);
+        if (clickActivity) {
+            navController.navigate(R.id.nav_parent_activity);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            // If not granted, request the permission
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+        } else {
+            // Permission is already granted, you can display windows with TYPE_APPLICATION_OVERLAY
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void updateToken() {
