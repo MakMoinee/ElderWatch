@@ -97,11 +97,12 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
     }
 
     private void showAlertDialog(Context context, String title, String body) {
+
+        int userType = new UserPref(context).getIntItem("userType");
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialog);
         builder.setTitle(title);
         builder.setMessage(body);
         builder.setNegativeButton("Open", (dialog, which) -> {
-            int userType = new UserPref(context).getIntItem("userType");
             if (userType == 2) {
                 Intent intent = new Intent(context, DashboardActivity.class);
                 intent.putExtra("clickActivity", true);
