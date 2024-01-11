@@ -44,6 +44,11 @@ public class ParentActivityAdapter extends RecyclerView.Adapter<ParentActivityAd
     @Override
     public void onBindViewHolder(@NonNull ParentActivityAdapter.ViewHolder holder, int position) {
         ActivityHistory history = historyList.get(position);
+        if (position == 0) {
+            holder.txtRecent.setText("New");
+        } else if (position > 1) {
+            holder.txtRecent.setVisibility(View.GONE);
+        }
         String patientID = "";
         for (PatientGuardian patientGuardian : patientGuardianList) {
             if (patientGuardian.getCaregiverID().equals(history.getCaregiverID())) {
@@ -68,12 +73,13 @@ public class ParentActivityAdapter extends RecyclerView.Adapter<ParentActivityAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtMessage, txtPatientName;
+        TextView txtMessage, txtPatientName,txtRecent;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMessage = itemView.findViewById(R.id.txtMessage);
             txtPatientName = itemView.findViewById(R.id.txtPatientName);
+            txtRecent = itemView.findViewById(R.id.txtRecent);
         }
     }
 }

@@ -51,7 +51,9 @@ public class ActivityHistoryDetail extends AppCompatActivity {
         history = new Gson().fromJson(historyRaw, new TypeToken<ActivityHistory>() {
         }.getType());
         setListener();
+        boolean fromParent = getIntent().getBooleanExtra("fromParent", false);
         if (history != null) {
+
             if (history.getStatus().equals("Responded")) {
                 binding.btnResponded.setText("Already Responded");
                 binding.btnResponded.setEnabled(false);
@@ -60,16 +62,17 @@ public class ActivityHistoryDetail extends AppCompatActivity {
                     binding.spinner.setSelection(index);
                     binding.spinner.setEnabled(false);
                 }
+            }else{
+                binding.btnResponded.setText("Not Responded Yet");
+                if (fromParent) {
+                    binding.btnResponded.setEnabled(false);
+                    binding.spinner.setVisibility(View.INVISIBLE);
+                    binding.lblRemarks.setVisibility(View.INVISIBLE);
+                }
             }
         }
 
-        boolean fromParent = getIntent().getBooleanExtra("fromParent", false);
-        if (fromParent) {
-            binding.lblRemarks.setVisibility(View.INVISIBLE);
-            binding.btnResponded.setText("Not Responded Yet");
-            binding.btnResponded.setEnabled(false);
-            binding.spinner.setVisibility(View.INVISIBLE);
-        }
+
         loadData();
 
     }
