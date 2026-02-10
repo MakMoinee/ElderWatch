@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "1034148438127",
-    "project_id": "elderwatch-909f1",
-    "storage_bucket": "elderwatch-909f1.appspot.com"
+    "project_number": "1027249380863",
+    "project_id": "elderwatch-6d7b5",
+    "storage_bucket": "elderwatch-6d7b5.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1034148438127:android:1712433ad197e4e64b6d9a",
+        "mobilesdk_app_id": "1:1027249380863:android:858750a616aa5323605bca",
         "android_client_info": {
           "package_name": "com.elderwatch.client"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1034148438127-5aipn2ratp7r0km26v6uqia9r8t12to4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.elderwatch.client",
-            "certificate_hash": "390645ed6df184f5944a0861f85b4cc6c21bc2da"
-          }
-        },
-        {
-          "client_id": "1034148438127-f6cbuujqda89qiml3lhiok9ptv5alg4o.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDRdyOcDbAITVsOYv58nOvvzQUWxiCl6sE"
+          "current_key": "AIzaSyCtkn2hlxqhvzha3J7RVYxGsm6Z5WRJRos"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1034148438127-f6cbuujqda89qiml3lhiok9ptv5alg4o.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
