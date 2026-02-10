@@ -19,6 +19,8 @@ public class FSRequest extends FirestoreRequest {
     public static final String TOKEN_COLLECTION = "tokens";
     public static final String CAREGIVER_ACTIVITY_COLLECTION = "activity";
 
+    public static final String SMS_API_COLLECTION = "keys";
+
     public FSRequest() {
         super();
     }
