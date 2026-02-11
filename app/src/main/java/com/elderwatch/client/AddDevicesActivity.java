@@ -14,6 +14,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.elderwatch.client.databinding.ActivityAddDevicesBinding;
 import com.elderwatch.client.models.Devices;
+import com.elderwatch.client.models.Users;
 import com.elderwatch.client.preference.UserPref;
 import com.elderwatch.client.services.FSRequest;
 import com.elderwatch.client.services.VRequest;
@@ -34,12 +35,14 @@ public class AddDevicesActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     VRequest vRequest;
+    Users currentUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         request = new FSRequest();
         userID = new UserPref(AddDevicesActivity.this).getUserID();
+        currentUser = new UserPref(AddDevicesActivity.this).getUsers();
         progressDialog = new ProgressDialog(AddDevicesActivity.this);
         progressDialog.setMessage("Sending Request ...");
         progressDialog.setCancelable(false);
@@ -59,12 +62,12 @@ public class AddDevicesActivity extends AppCompatActivity {
                 Toast.makeText(AddDevicesActivity.this, "Please Don't Leave Empty Fields", Toast.LENGTH_SHORT).show();
             } else {
                 progressDialog.show();
-                Devices devices = new Devices(null, userID, ip, username, password,null);
+                Devices devices = new Devices(null, userID, ip, username, password, null);
 
                 LocalVolleyRequestBody vBody = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                        .setUrl(String.format(VRequest.pingCameraURLString,ip,userID))
+                        .setUrl(String.format(VRequest.pingCameraURLString, ip, userID, currentUser.getPhoneNumber()))
                         .build();
-                Log.e("url",vBody.getUrl());
+                Log.e("url", vBody.getUrl());
                 vRequest.sendJSONGetRequest(vBody, new LocalVolleyRequestListener() {
 
                     @Override
@@ -78,7 +81,7 @@ public class AddDevicesActivity extends AppCompatActivity {
                             public <T> void onSuccess(T any) {
                                 progressDialog.dismiss();
                                 Toast.makeText(AddDevicesActivity.this, "Successfully Added CCTV", Toast.LENGTH_SHORT).show();
-                                sendStartRequest(ip,userID);
+                                sendStartRequest(ip, userID);
                             }
 
                             @Override
@@ -123,8 +126,8 @@ public class AddDevicesActivity extends AppCompatActivity {
     }
 
     private void sendStartRequest(String ip, String userID) {
-        LocalVolleyRequestBody vBody  =new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                .setUrl(String.format(VRequest.startCameraURLString,ip, userID))
+        LocalVolleyRequestBody vBody = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
+                .setUrl(String.format(VRequest.startCameraURLString, ip, userID))
                 .build();
 
         vRequest.sendJSONGetRequest(vBody, new LocalVolleyRequestListener() {
