@@ -26,6 +26,7 @@ import com.elderwatch.client.databinding.DialogDeviceBinding;
 import com.elderwatch.client.databinding.FragmentDevicesBinding;
 import com.elderwatch.client.interfaces.DeviceListener;
 import com.elderwatch.client.models.Devices;
+import com.elderwatch.client.models.Users;
 import com.elderwatch.client.preference.UserPref;
 import com.elderwatch.client.services.FSRequest;
 import com.elderwatch.client.services.VRequest;
@@ -57,12 +58,14 @@ public class DevicesFragment extends Fragment {
     VRequest vRequest;
 
     ProgressDialog pDialog;
+    Users currentUser;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         request = new FSRequest();
         userID = new UserPref(requireContext()).getUserID();
+        currentUser = new UserPref(requireContext()).getUsers();
         devicesList = new ArrayList<>();
         vRequest = new VRequest(requireContext());
         pDialog = new ProgressDialog(requireContext());
@@ -106,7 +109,7 @@ public class DevicesFragment extends Fragment {
                         public void onDeviceClickListener(Devices devices) {
                             if (devices != null) {
                                 AlertDialog.Builder tBuilder = new AlertDialog.Builder(requireContext());
-                                dialogDeviceBinding = DialogDeviceBinding.inflate(LayoutInflater.from(requireContext()),null,false);
+                                dialogDeviceBinding = DialogDeviceBinding.inflate(LayoutInflater.from(requireContext()), null, false);
                                 tBuilder.setView(dialogDeviceBinding.getRoot());
                                 setDialogListener(devices);
                                 deviceAlertDialog = tBuilder.create();
@@ -135,19 +138,19 @@ public class DevicesFragment extends Fragment {
         dialogDeviceBinding.btnActivate.setOnClickListener(view -> {
             pDialog.show();
             LocalVolleyRequestBody body = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                    .setUrl(String.format(VRequest.startCameraURLString,devices.getIp(),devices.getUserID()))
+                    .setUrl(String.format(VRequest.startCameraURLString, devices.getIp(), devices.getUserID(), currentUser.getPhoneNumber()))
                     .build();
             vRequest.sendJSONGetRequest(body, new LocalVolleyRequestListener() {
 
                 @Override
                 public void onSuccessJSON(JSONObject object) {
-                   new Handler().postDelayed(() -> {
-                       pDialog.dismiss();
-                       deviceAlertDialog.dismiss();
-                       Toast.makeText(requireContext(), "Successfully Activated Device", Toast.LENGTH_SHORT).show();
-                       binding.recycler.setAdapter(null);
-                       loadList();
-                   },15000);
+                    new Handler().postDelayed(() -> {
+                        pDialog.dismiss();
+                        deviceAlertDialog.dismiss();
+                        Toast.makeText(requireContext(), "Successfully Activated Device", Toast.LENGTH_SHORT).show();
+                        binding.recycler.setAdapter(null);
+                        loadList();
+                    }, 15000);
                 }
 
                 @Override
@@ -178,7 +181,7 @@ public class DevicesFragment extends Fragment {
         dialogDeviceBinding.btnDeleteDevice.setOnClickListener(view -> {
             AlertDialog.Builder sBuilder = new AlertDialog.Builder(requireContext());
             DialogInterface.OnClickListener dListener = (dialogInterface, i) -> {
-                switch(i){
+                switch (i) {
                     case DialogInterface.BUTTON_NEGATIVE -> {
                         FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                                 .setCollectionName(FSRequest.DEVICES_COLLECTION)
@@ -196,8 +199,8 @@ public class DevicesFragment extends Fragment {
                             @Override
                             public void onError(Error error) {
                                 Toast.makeText(requireContext(), "Failed To Delete Device, Please Try Again Later", Toast.LENGTH_SHORT).show();
-                                if(error!=null && error.getLocalizedMessage()!=null){
-                                    Log.e("error_delete",error.getLocalizedMessage());
+                                if (error != null && error.getLocalizedMessage() != null) {
+                                    Log.e("error_delete", error.getLocalizedMessage());
                                 }
                             }
                         });
@@ -209,8 +212,8 @@ public class DevicesFragment extends Fragment {
             };
 
             sBuilder.setMessage("Are You Sure You Want To Delete This Device?")
-                    .setNegativeButton("Yes",dListener)
-                    .setPositiveButton("No",dListener)
+                    .setNegativeButton("Yes", dListener)
+                    .setPositiveButton("No", dListener)
                     .setCancelable(false)
                     .show();
         });
