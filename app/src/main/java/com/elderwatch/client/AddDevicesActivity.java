@@ -65,7 +65,7 @@ public class AddDevicesActivity extends AppCompatActivity {
                 Devices devices = new Devices(null, userID, ip, username, password, null);
 
                 LocalVolleyRequestBody vBody = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                        .setUrl(String.format(VRequest.pingCameraURLString, ip, userID, currentUser.getPhoneNumber()))
+                        .setUrl(String.format(VRequest.pingCameraURLString, ip, userID))
                         .build();
                 Log.e("url", vBody.getUrl());
                 vRequest.sendJSONGetRequest(vBody, new LocalVolleyRequestListener() {
@@ -127,7 +127,7 @@ public class AddDevicesActivity extends AppCompatActivity {
 
     private void sendStartRequest(String ip, String userID) {
         LocalVolleyRequestBody vBody = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                .setUrl(String.format(VRequest.startCameraURLString, ip, userID))
+                .setUrl(String.format(VRequest.startCameraURLString, ip, userID,  currentUser.getPhoneNumber()))
                 .build();
 
         vRequest.sendJSONGetRequest(vBody, new LocalVolleyRequestListener() {
