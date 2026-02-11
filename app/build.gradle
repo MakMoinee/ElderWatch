@@ -6,12 +6,14 @@ plugins {
 android {
     namespace 'com.elderwatch.client'
     useLibrary 'org.apache.http.legacy'
-    compileSdk 34
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         applicationId "com.elderwatch.client"
         minSdk 24
-        targetSdk 33
+        targetSdk 36
         versionCode 1
         versionName "1.0.0"
 
