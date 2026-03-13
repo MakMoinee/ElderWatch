@@ -140,6 +140,7 @@ public class DevicesFragment extends Fragment {
             LocalVolleyRequestBody body = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
                     .setUrl(String.format(VRequest.startCameraURLString, devices.getIp(), devices.getUserID(), currentUser.getPhoneNumber(), devices.getUsername(), devices.getPassword()))
                     .build();
+            Log.e("my_url",body.getUrl());
             vRequest.sendJSONGetRequest(body, new LocalVolleyRequestListener() {
 
                 @Override
