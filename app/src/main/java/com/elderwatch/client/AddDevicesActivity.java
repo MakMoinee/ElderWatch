@@ -55,8 +55,8 @@ public class AddDevicesActivity extends AppCompatActivity {
     private void setListeners() {
         binding.btnAddCCTV.setOnClickListener(v -> {
             String ip = binding.editIP.getText().toString().trim();
-            String username = binding.editIP.getText().toString().trim();
-            String password = binding.editIP.getText().toString().trim();
+            String username = binding.editUsername.getText().toString().trim();
+            String password = binding.editPassword.getText().toString().trim();
 
             if (ip.equals("") || username.equals("") || password.equals("")) {
                 Toast.makeText(AddDevicesActivity.this, "Please Don't Leave Empty Fields", Toast.LENGTH_SHORT).show();
