@@ -127,7 +127,7 @@ public class AddDevicesActivity extends AppCompatActivity {
 
     private void sendStartRequest(String ip, String userID, String username, String password) {
         LocalVolleyRequestBody vBody = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                .setUrl(String.format(VRequest.startCameraURLString, ip, userID, currentUser.getPhoneNumber(), username == null ? "" : username, password == null ? "" : password))
+                .setUrl(String.format(VRequest.startCameraURLString, ip, userID, currentUser.getPhoneNumber(), username, password))
                 .build();
 
         vRequest.sendJSONGetRequest(vBody, new LocalVolleyRequestListener() {
