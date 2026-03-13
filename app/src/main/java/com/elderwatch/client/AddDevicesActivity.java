@@ -81,7 +81,7 @@ public class AddDevicesActivity extends AppCompatActivity {
                             public <T> void onSuccess(T any) {
                                 progressDialog.dismiss();
                                 Toast.makeText(AddDevicesActivity.this, "Successfully Added CCTV", Toast.LENGTH_SHORT).show();
-                                sendStartRequest(ip, userID);
+                                sendStartRequest(ip, userID, username, password);
                             }
 
                             @Override
@@ -125,9 +125,9 @@ public class AddDevicesActivity extends AppCompatActivity {
         });
     }
 
-    private void sendStartRequest(String ip, String userID) {
+    private void sendStartRequest(String ip, String userID, String username, String password) {
         LocalVolleyRequestBody vBody = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                .setUrl(String.format(VRequest.startCameraURLString, ip, userID,  currentUser.getPhoneNumber()))
+                .setUrl(String.format(VRequest.startCameraURLString, ip, userID, currentUser.getPhoneNumber(), username == null ? "" : username, password == null ? "" : password))
                 .build();
 
         vRequest.sendJSONGetRequest(vBody, new LocalVolleyRequestListener() {
