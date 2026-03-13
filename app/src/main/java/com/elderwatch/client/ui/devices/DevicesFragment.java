@@ -138,7 +138,7 @@ public class DevicesFragment extends Fragment {
         dialogDeviceBinding.btnActivate.setOnClickListener(view -> {
             pDialog.show();
             LocalVolleyRequestBody body = new LocalVolleyRequestBody.LocalVolleyRequestBodyBuilder()
-                    .setUrl(String.format(VRequest.startCameraURLString, devices.getIp(), devices.getUserID(), currentUser.getPhoneNumber()))
+                    .setUrl(String.format(VRequest.startCameraURLString, devices.getIp(), devices.getUserID(), currentUser.getPhoneNumber(), devices.getUsername(), devices.getPassword()))
                     .build();
             vRequest.sendJSONGetRequest(body, new LocalVolleyRequestListener() {
 
