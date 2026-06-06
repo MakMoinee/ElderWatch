@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -85,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                             case DialogInterface.BUTTON_POSITIVE -> {
                                 dialog.dismiss();
                                 AlertDialog.Builder pBuilder = new AlertDialog.Builder(LoginActivity.this);
-                                parentLoginBinding = DialogParentLoginBinding.inflate(getLayoutInflater(), null, false);
+                                parentLoginBinding = DialogParentLoginBinding.inflate(LayoutInflater.from(LoginActivity.this), null, false);
                                 pBuilder.setView(parentLoginBinding.getRoot());
                                 setParentListeners();
                                 alertDialog = pBuilder.create();

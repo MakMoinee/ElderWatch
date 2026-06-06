@@ -195,6 +195,7 @@ public class ParentActivityFragment extends Fragment {
 
                                         @Override
                                         public void onError(Error error) {
+                                            myDialog.dismiss();
                                             Toast.makeText(requireContext(), "There are no history yet", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -213,7 +214,10 @@ public class ParentActivityFragment extends Fragment {
                             Toast.makeText(requireContext(), "There are no patient and caregiver linked yet", Toast.LENGTH_SHORT).show();
                         }
                     });
+
+                    myDialog.dismiss();
                 } else {
+                    myDialog.dismiss();
                     Toast.makeText(requireContext(), "There is no patients linked yet", Toast.LENGTH_SHORT).show();
                 }
             }
