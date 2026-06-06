@@ -5,4 +5,19 @@ public interface LogoutListener {
 
     void logoutNegativeButton();
 
+    default void navigateToQR() {
+    }
+
+    default void navigateToPatients() {
+
+    }
+
+    default void navigateToActivities() {
+
+    }
+
+    default void navigateToDevices() {
+
+    }
+
 }

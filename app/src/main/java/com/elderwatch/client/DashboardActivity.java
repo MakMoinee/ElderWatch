@@ -298,6 +298,11 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
     }
 
     @Override
+    public void navigateToQR() {
+        navController.navigate(R.id.nav_generate_qr);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         pDialog.show();
@@ -308,5 +313,20 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void navigateToPatients() {
+        navController.navigate(R.id.nav_patients);
+    }
+
+    @Override
+    public void navigateToActivities() {
+        navController.navigate(R.id.nav_activities);
+    }
+
+    @Override
+    public void navigateToDevices() {
+        navController.navigate(R.id.nav_devices);
     }
 }

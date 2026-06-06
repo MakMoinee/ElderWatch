@@ -421,4 +421,9 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
     public void logoutNegativeButton() {
         navController.navigate(R.id.nav_parent_home);
     }
+
+    @Override
+    public void navigateToQR() {
+
+    }
 }
