@@ -76,7 +76,7 @@ public class AddDevicesActivity extends AppCompatActivity {
                                 .setParams(MapForm.convertObjectToMap(devices))
                                 .setCollectionName(FSRequest.DEVICES_COLLECTION)
                                 .build();
-                        request.insertUniqueData(body, new FirestoreListener() {
+                        request.insertOnly(body, new FirestoreListener() {
                             @Override
                             public <T> void onSuccess(T any) {
                                 progressDialog.dismiss();

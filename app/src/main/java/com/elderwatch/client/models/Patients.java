@@ -1,6 +1,9 @@
 package com.elderwatch.client.models;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +17,7 @@ public class Patients {
     private String fullName;
     private String address;
     private String birthDate;
-    private String deviceID;
+    private List<String> deviceID;
 
     public Patients(PatientBuilder builder) {
         this.patientID = builder.patientID;
@@ -37,7 +40,7 @@ public class Patients {
 
         private String fullName;
 
-        private String deviceID;
+        private List<String> deviceID = new ArrayList<>();
 
         public PatientBuilder setFullName(String fullName) {
             this.fullName = fullName;
@@ -75,7 +78,7 @@ public class Patients {
         }
 
         public PatientBuilder setDeviceID(String deviceID) {
-            this.deviceID = deviceID;
+            this.deviceID.add(deviceID);
             return this;
         }
 

@@ -374,7 +374,7 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedPatientID = patientsList.get(parent.getSelectedItemPosition()).getPatientID();
-                selectedDeviceID = patientsList.get(parent.getSelectedItemPosition()).getDeviceID();
+//                selectedDeviceID = patientsList.get(parent.getSelectedItemPosition()).getDeviceID();
             }
 
             @Override

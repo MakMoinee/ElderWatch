@@ -129,7 +129,6 @@ public class HomeFragment extends Fragment {
                     });
 
                     if (historyList.size() > 0) {
-                        binding.txtActCount.setText(Integer.toString(historyList.size()));
                         loadPatientList();
 
                     }
@@ -138,7 +137,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onError(Error error) {
-                Toast.makeText(requireContext(), "There are no activity yet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "There are no activity yet", Toast.LENGTH_SHORT).show();   binding.txtActCount.setText(Integer.toString(historyList.size()));
+                binding.txtActCount.setText(Integer.toString(historyList.size()));
+                binding.txtCount.setText(Integer.toString(patientsList.size()));
+                binding.txtCountDevices.setText("0");
             }
         });
     }
@@ -167,10 +169,11 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
+                binding.txtCount.setText(Integer.toString(patientsList.size()));
                 if (patientsList.size() > 0) {
-                    binding.txtCount.setText(Integer.toString(patientsList.size()));
                     loadCaregiverActivity();
                 }
+
             }
 
             @Override

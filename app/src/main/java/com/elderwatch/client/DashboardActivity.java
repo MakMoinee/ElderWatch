@@ -220,9 +220,9 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
             @Override
             public void onError(Error error) {
                 pDialog.dismiss();
-                Toast.makeText(DashboardActivity.this, "There's no devices added yet, please add", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(DashboardActivity.this, AddDevicesActivity.class);
-                startActivity(intent);
+                Toast.makeText(DashboardActivity.this, "There's no devices added yet, please contact admin to add", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(DashboardActivity.this, AddDevicesActivity.class);
+//                startActivity(intent);
             }
         });
 
@@ -239,9 +239,9 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
                 pDialog.dismiss();
                 if (any instanceof QuerySnapshot snapshots) {
                     if (snapshots.isEmpty()) {
-                        Toast.makeText(DashboardActivity.this, "There's no patient added yet, please add", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(DashboardActivity.this, ActivityAddPatient.class);
-                        startActivity(intent);
+                        Toast.makeText(DashboardActivity.this, "There's no patient added yet, please contact admin to add", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(DashboardActivity.this, ActivityAddPatient.class);
+//                        startActivity(intent);
                     } else {
 
                     }
@@ -251,9 +251,9 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
             @Override
             public void onError(Error error) {
                 pDialog.dismiss();
-                Toast.makeText(DashboardActivity.this, "There's no patient added yet, please add", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(DashboardActivity.this, ActivityAddPatient.class);
-                startActivity(intent);
+                Toast.makeText(DashboardActivity.this, "There's no patient added yet, please contact admin to add", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(DashboardActivity.this, ActivityAddPatient.class);
+//                startActivity(intent);
             }
         });
     }

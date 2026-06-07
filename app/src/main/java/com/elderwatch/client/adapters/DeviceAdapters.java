@@ -41,13 +41,14 @@ public class DeviceAdapters extends RecyclerView.Adapter<DeviceAdapters.ViewHold
     public void onBindViewHolder(@NonNull DeviceAdapters.ViewHolder holder, int position) {
         Devices devices = devicesList.get(position);
         holder.txtIP.setText(devices.getIp());
-        holder.txtStatus.setText(devices.getStatus());
-        if(devices.getStatus()!=null){
-            switch (devices.getStatus()){
-                case "Active" ->{
+        if (devices.getStatus() != null) {
+            switch (devices.getStatus()) {
+                case "Active", "online" -> {
+                    holder.txtStatus.setText("Online");
                     holder.txtStatus.setTextColor(ContextCompat.getColor(mContext, android.R.color.holo_green_dark));
                 }
-                case "Inactive"->{
+                case "Inactive", "offline" -> {
+                    holder.txtStatus.setText("Offline");
                     holder.txtStatus.setTextColor(ContextCompat.getColor(mContext, android.R.color.holo_red_dark));
                 }
             }
@@ -64,6 +65,7 @@ public class DeviceAdapters extends RecyclerView.Adapter<DeviceAdapters.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtIP, txtStatus;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtIP = itemView.findViewById(R.id.txtIP);
