@@ -295,12 +295,20 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
     @Override
     public void logoutNegativeButton() {
-        navController.navigate(R.id.nav_home);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
+                .build();
+        navController.navigate(R.id.nav_home, null, navOptions);
     }
 
     @Override
     public void navigateToQR() {
-        navController.navigate(R.id.nav_generate_qr);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
+                .build();
+        navController.navigate(R.id.nav_generate_qr, null, navOptions);
     }
 
     @Override
