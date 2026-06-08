@@ -297,18 +297,14 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
     public void logoutNegativeButton() {
         NavOptions navOptions = new NavOptions.Builder()
                 .setLaunchSingleTop(true)
-                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
+                .setPopUpTo(R.id.nav_home, false) // keep home, just pop above it
                 .build();
         navController.navigate(R.id.nav_home, null, navOptions);
     }
 
     @Override
     public void navigateToQR() {
-        NavOptions navOptions = new NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
-                .build();
-        navController.navigate(R.id.nav_generate_qr, null, navOptions);
+        navController.navigate(R.id.nav_generate_qr, null, buildNavOptions());
     }
 
     @Override
@@ -326,29 +322,23 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
     @Override
     public void navigateToPatients() {
-        NavOptions navOptions = new NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
-                .build();
-        navController.navigate(R.id.nav_patients, null, navOptions);
+        navController.navigate(R.id.nav_patients, null, buildNavOptions());
     }
 
     @Override
     public void navigateToActivities() {
-        NavOptions navOptions = new NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
-                .build();
-        navController.navigate(R.id.nav_activities, null, navOptions);
+        navController.navigate(R.id.nav_activities, null, buildNavOptions());
     }
 
     @Override
     public void navigateToDevices() {
+        navController.navigate(R.id.nav_devices, null, buildNavOptions());
+    }
 
-        NavOptions navOptions = new NavOptions.Builder()
+    private NavOptions buildNavOptions() {
+        return new NavOptions.Builder()
                 .setLaunchSingleTop(true)
-                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
+                .setPopUpTo(R.id.nav_home, true)  // <-- inclusive=true is the key fix
                 .build();
-        navController.navigate(R.id.nav_devices, null, navOptions);
     }
 }
