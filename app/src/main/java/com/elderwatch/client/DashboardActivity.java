@@ -27,6 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -317,16 +318,29 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
 
     @Override
     public void navigateToPatients() {
-        navController.navigate(R.id.nav_patients);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
+                .build();
+        navController.navigate(R.id.nav_patients, null, navOptions);
     }
 
     @Override
     public void navigateToActivities() {
-        navController.navigate(R.id.nav_activities);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
+                .build();
+        navController.navigate(R.id.nav_activities, null, navOptions);
     }
 
     @Override
     public void navigateToDevices() {
-        navController.navigate(R.id.nav_devices);
+
+        NavOptions navOptions = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(navController.getGraph().getStartDestinationId(), false)
+                .build();
+        navController.navigate(R.id.nav_devices, null, navOptions);
     }
 }
