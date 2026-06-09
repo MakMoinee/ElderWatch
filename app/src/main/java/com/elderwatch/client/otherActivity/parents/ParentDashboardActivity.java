@@ -289,6 +289,10 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
 
     private void setDialogChooseListener() {
         patientBinding.btnProceed.setOnClickListener(v -> {
+            if (selectedDeviceID.isEmpty()) {
+                Toast.makeText(ParentDashboardActivity.this, "Selected patient has no linked device", Toast.LENGTH_SHORT).show();
+                return;
+            }
             AlertDialog.Builder tBuilder = new AlertDialog.Builder(ParentDashboardActivity.this);
             DialogInterface.OnClickListener dListener = (dialog, which) -> {
                 switch (which) {
@@ -373,8 +377,14 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
         patientBinding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedPatientID = patientsList.get(parent.getSelectedItemPosition()).getPatientID();
-//                selectedDeviceID = patientsList.get(parent.getSelectedItemPosition()).getDeviceID();
+                Patients selected = patientsList.get(parent.getSelectedItemPosition());
+                selectedPatientID = selected.getPatientID();
+                List<String> deviceIDs = selected.getDeviceID();
+                if (deviceIDs != null && !deviceIDs.isEmpty()) {
+                    selectedDeviceID = deviceIDs.get(0);
+                } else {
+                    selectedDeviceID = "";
+                }
             }
 
             @Override
