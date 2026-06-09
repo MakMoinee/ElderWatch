@@ -309,12 +309,14 @@ public class ParentDashboardActivity extends AppCompatActivity implements Logout
                                         if (dSnaphots.exists()) {
                                             Devices devices = dSnaphots.toObject(Devices.class);
                                             if (devices != null) {
+                                                String mPhoneNumber = new UserPref(ParentDashboardActivity.this).getStringItem("phoneNumber");
                                                 PatientGuardian patientGuardian = new PatientGuardian.PatientGuardianBuilder()
                                                         .setPatientID(selectedPatientID)
                                                         .setUserID(userID)
                                                         .setCaregiverID(caregiverID)
                                                         .setDeviceID(selectedDeviceID)
                                                         .setIp(devices.getIp())
+                                                        .setPhoneNumber(mPhoneNumber)
                                                         .build();
 
                                                 new IpPref(ParentDashboardActivity.this).storeIP(devices.getIp());

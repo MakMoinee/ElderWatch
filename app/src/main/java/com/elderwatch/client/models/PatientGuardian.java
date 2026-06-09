@@ -13,6 +13,7 @@ public class PatientGuardian {
     private String caregiverID;
     private String deviceID;
     private String ip;
+    private String phoneNumber;
 
     public PatientGuardian(PatientGuardianBuilder builder) {
         this.patientID = builder.patientID;
@@ -20,6 +21,7 @@ public class PatientGuardian {
         this.caregiverID = builder.caregiverID;
         this.deviceID = builder.deviceID;
         this.ip = builder.ip;
+        this.phoneNumber = builder.phoneNumber;
     }
 
     public static class PatientGuardianBuilder {
@@ -29,6 +31,12 @@ public class PatientGuardian {
         private String caregiverID;
         private String deviceID;
         private String ip;
+        private String phoneNumber;
+
+        public PatientGuardianBuilder setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
 
         public PatientGuardianBuilder setIp(String ip) {
             this.ip = ip;
